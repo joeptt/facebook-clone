@@ -1,0 +1,19 @@
+DROP TABLE IF EXISTS password_reset_codes;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR NOT NULL CHECK (first_name != ''),
+    last_name VARCHAR NOT NULL CHECK (last_name != ''),
+    email VARCHAR NOT NULL UNIQUE CHECK (email != ''),
+    profile_picture_url TEXT,
+    password_hashed VARCHAR NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW() 
+);
+
+CREATE TABLE password_reset_codes (
+    id              SERIAL PRIMARY KEY,
+    code            VARCHAR(6) NOT NULL,
+    email           VARCHAR(50) NOT NULL,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

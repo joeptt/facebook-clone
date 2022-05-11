@@ -1,3 +1,38 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background-color: ghostwhite;
+    margin: 0;
+}
+
+#profilePictureHeader {
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+}
+
+.modal {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    height: 250px;
+    width: 600px;
+    border: 1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 80px;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    background-color: hotpink;
 }
