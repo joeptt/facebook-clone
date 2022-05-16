@@ -35,28 +35,29 @@ export default class Login extends Component {
         const data = await res.json();
         console.log("DATA ->", data);
 
-        if (data.successStepOne) {
-            this.setState({
-                errorOne: false,
-                currentStep: 2,
-            });
-        } else if (data.successStepTwo) {
-            console.log("error thishithi -> ", this.state.error);
-            this.setState({
-                errorTwo: false,
-                currentStep: 3,
-            });
-        }
-
-        if (!data.successStepOne) {
-            console.log("terror");
-            this.setState({
-                errorOne: true,
-            });
-        } else if (!data.successStepTwo) {
-            this.setState({
-                errorTwo: true,
-            });
+        if (this.state.currentStep === 1) {
+            if (data.successStepOne) {
+                this.setState({
+                    errorOne: false,
+                    currentStep: 2,
+                });
+            } else {
+                console.log("terror");
+                this.setState({
+                    errorOne: true,
+                });
+            }
+        } else if (this.state.currentStep === 2) {
+            if (data.successStepTwo) {
+                this.setState({
+                    errorTwo: false,
+                    currentStep: 3,
+                });
+            } else {
+                this.setState({
+                    errorTwo: true,
+                });
+            }
         }
     }
 
@@ -94,8 +95,8 @@ export default class Login extends Component {
                             placeholder="New PW..."
                         ></input>
                         <button>Send</button>
-                        {this.state.errorTwo && <p>Code invalid. Try again.</p>}
                     </form>
+                    {this.state.errorTwo && <p>Code invalid. Try again.</p>}
                 </>
             );
         } else if (this.state.currentStep === 3) {

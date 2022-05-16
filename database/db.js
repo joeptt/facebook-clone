@@ -4,9 +4,12 @@ const bcrypt = require("bcryptjs");
 
 function getUserByEmail(email) {
     // finds user by email on database
-    return db.query(`
-        SELECT * FROM users WHERE email = '${email}'
-    `);
+    return db.query(
+        `
+        SELECT * FROM users WHERE email = $1
+    `,
+        [email]
+    );
 }
 
 module.exports.logInCheck = function ({ email, password }) {
@@ -85,5 +88,70 @@ module.exports.compareCodes = function ({ code }) {
         WHERE code = $1
     `;
     const params = [code];
+    return db.query(query, params).then((result) => result.rows[0]);
+};
+
+module.exports.storeBioOnDb = function (bio, user_id) {
+    const query = `
+        UPDATE users 
+        SET bio = $1
+        WHERE id = $2
+        RETURNING *
+    `;
+    const params = [bio, user_id];
+    return db.query(query, params).then((result) => result.rows[0]);
+};
+
+module.exports.updatingPassword = function (hashed_password, user_id) {
+    const query = `
+        UPDATE users 
+        SET password_hashed = $1
+        WHERE id = $2
+        RETURNING *
+    `;
+    const params = [hashed_password, user_id];
+    return db.query(query, params).then((result) => result.rows[0]);
+};
+
+module.exports.searchUsersInput = async function (input, user_id) {
+    try {
+        const params = [input + "%", user_id];
+        const query = `
+            SELECT * FROM users
+            WHERE NOT id = $2
+            AND (first_name ILIKE $1 OR last_name ILIKE $1)
+            LIMIT 5
+        `;
+        const result = await db.query(query, params);
+        console.log(result.rows);
+        if (result.rows.length < 1) return null;
+        return result.rows;
+    } catch (error) {
+        console.log("Error at search -> ", error);
+    }
+};
+
+module.exports.recentlyAddedUsers = async function (user_id) {
+    try {
+        const params = [user_id];
+        const query = `
+            SELECT * FROM users
+            WHERE NOT id = $1
+            ORDER BY created_at DESC
+            LIMIT 3
+        `;
+        const result = await db.query(query, params);
+        return result.rows;
+    } catch (error) {
+        console.log("Error on pre-populating search bar -> ", error);
+    }
+};
+
+module.exports.getUserById = function (user_id) {
+    const params = [user_id];
+    const query = `
+        SELECT * FROM users 
+        WHERE id = $1
+    `;
     return db.query(query, params).then((result) => result.rows[0]);
 };

@@ -1,5 +1,10 @@
 import { Component } from "react";
 import ProfileModal from "./profilePictureModal";
+import Profile from "./profile";
+import ProfilePicture from "./profilePicture";
+import { BrowserRouter, Route } from "react-router-dom";
+import FindPeople from "./findPeople";
+import OtherProfile from "./otherProfile";
 
 export default class App extends Component {
     constructor() {
@@ -9,13 +14,26 @@ export default class App extends Component {
             last_name: "",
             profile_picture_url: "",
             modalShown: false,
+            bio: "",
         };
 
         this.onClickImage = this.onClickImage.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.onUpload = this.onUpload.bind(this);
+        this.onUploadBio = this.onUploadBio.bind(this);
     }
+
+    onClickLogout() {
+        fetch("/logout")
+            .then((res) => res.json())
+            .then((data) => {
+                console.log("LOGOUT", data.success);
+                if (data.success === true) location.reload(true);
+            });
+    }
+
     onClickImage() {
+        console.log("onclickimage runs");
         this.setState({
             modalShown: true,
         });
@@ -37,6 +55,12 @@ export default class App extends Component {
         }
     }
 
+    onUploadBio(user) {
+        this.setState({
+            bio: user.bio,
+        });
+    }
+
     async componentDidMount() {
         const res = await fetch("/api/users/me");
         const data = await res.json();
@@ -44,38 +68,49 @@ export default class App extends Component {
             first_name: data.first_name,
             last_name: data.last_name,
             profile_picture_url: data.profile_picture_url,
+            bio: data.bio,
         });
     }
     render() {
         return (
-            <div className="app">
-                <header>
-                    <nav>Home</nav>
-                    <img
-                        onClick={this.onClickImage}
-                        id="profilePictureHeader"
-                        src={
-                            this.state.profile_picture_url
-                                ? this.state.profile_picture_url
-                                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-                        }
-                    />
-                </header>
-                <main className="container">
-                    <h1>
-                        Welcome back {this.state.first_name}{" "}
-                        {this.state.last_name}
-                    </h1>
-                </main>
+            <BrowserRouter>
+                <Route exact path="/">
+                    <div className="app">
+                        <header>
+                            <nav>Home</nav>
+                            <button onClick={this.onClickLogout}>LOGOUT</button>
+                            <div>
+                                <FindPeople />
+                            </div>
+                            <ProfilePicture
+                                profile_picture_url={
+                                    this.state.profile_picture_url
+                                }
+                                onClickImage={this.onClickImage}
+                            />
+                        </header>
+                        <main className="container"></main>
 
-                <footer>2020 ACME</footer>
-                {this.state.modalShown && (
-                    <ProfileModal
-                        closeModal={this.closeModal}
-                        onUpload={this.onUpload}
+                        <footer></footer>
+                        {this.state.modalShown && (
+                            <ProfileModal
+                                closeModal={this.closeModal}
+                                onUpload={this.onUpload}
+                            />
+                        )}
+                    </div>
+                </Route>
+                <Route exact path="/profile">
+                    <Profile
+                        {...this.state}
+                        onUploadBio={this.onUploadBio}
+                        profile_picture_url={this.state.profile_picture_url}
                     />
-                )}
-            </div>
+                </Route>
+                <Route path="/user/:otherUserId">
+                    <OtherProfile />
+                </Route>
+            </BrowserRouter>
         );
     }
 }

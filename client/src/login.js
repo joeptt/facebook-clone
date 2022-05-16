@@ -1,14 +1,19 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
+import Registration from "./registration";
+import RecentLogins from "./recentLogins";
 
 export default class Login extends Component {
     constructor() {
         super();
         this.state = {
             error: false,
+            showRegistration: false,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.showRegister = this.showRegister.bind(this);
+        this.closeRegister = this.closeRegister.bind(this);
     }
 
     handleChange(e) {
@@ -19,6 +24,17 @@ export default class Login extends Component {
             },
             () => console.log(this.state)
         );
+    }
+
+    showRegister() {
+        this.setState({
+            showRegistration: true,
+        });
+    }
+    closeRegister() {
+        this.setState({
+            showRegistration: false,
+        });
     }
 
     async handleSubmit(e) {
@@ -51,30 +67,50 @@ export default class Login extends Component {
 
     render() {
         return (
-            <>
-                <h1>LOGIN!</h1>
-                {this.state.error && <p>Oops, something went wrong!</p>}
-                <form onSubmit={this.handleSubmit}>
-                    <input
-                        onChange={this.handleChange}
-                        type="text"
-                        name="email"
-                        placeholder="E-Mail..."
-                    ></input>
-                    <input
-                        onChange={this.handleChange}
-                        type="password"
-                        name="password"
-                        placeholder="Password..."
-                    ></input>
-                    <button>Login</button>
-                </form>
+            <div id="login-page">
+                {this.state.showRegistration && (
+                    <Registration closeRegister={this.closeRegister} />
+                )}
+                <RecentLogins />
+                {/* if there is cookies then show RecentLogins if not show Text saying no recent logins aavailabe  */}
+                <div id="login-input-div">
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="input-field-login">
+                            <input
+                                onChange={this.handleChange}
+                                type="text"
+                                name="email"
+                                placeholder="&nbsp;"
+                            />
+                            <label htmlFor="email" className="placeholder">
+                                E-Mail
+                            </label>
+                        </div>
+                        <div className="input-field-login">
+                            <input
+                                onChange={this.handleChange}
+                                type="password"
+                                name="password"
+                                placeholder="&nbsp;"
+                            />
+                            <label htmlFor="password" className="placeholder">
+                                Password
+                            </label>
+                        </div>
+                        {this.state.error && <p>Oops, something went wrong!</p>}
+                        <button id="login-button">Log In</button>
+                    </form>
 
-                <Link to="/">New? Register now!</Link>
-                <br></br>
-
-                <Link to="/reset-password">Forgot password? reset.</Link>
-            </>
+                    <Link to="/reset-password" id="forgot-password-link">
+                        Forgot password?{" "}
+                    </Link>
+                    <div id="break-line-login"></div>
+                    <button id="create-new-account" onClick={this.showRegister}>
+                        Create new account
+                    </button>
+                    <br></br>
+                </div>
+            </div>
         );
     }
 }

@@ -1,9 +1,8 @@
 import { Component } from "react";
-import { Link } from "react-router-dom";
 
 export default class Registration extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {};
 
         this.handleChange = this.handleChange.bind(this);
@@ -50,38 +49,66 @@ export default class Registration extends Component {
     }
     render() {
         return (
-            <>
-                <h1>SIGN UP!</h1>
-                {this.state.error && <p>Oops, something went wrong!</p>}
-                <form onSubmit={this.handleSubmit}>
-                    <input
-                        onChange={this.handleChange}
-                        type="text"
-                        name="first"
-                        placeholder="First Name..."
-                    />
-                    <input
-                        onChange={this.handleChange}
-                        type="text"
-                        name="last"
-                        placeholder="Last Name..."
-                    />
-                    <input
-                        onChange={this.handleChange}
-                        type="email"
-                        name="email"
-                        placeholder="Email Address..."
-                    />
-                    <input
-                        onChange={this.handleChange}
-                        type="password"
-                        name="password"
-                        placeholder="Password..."
-                    />
-                    <button>Submit</button>
+            <div id="register-input-div">
+                <div id="header-register">
+                    <h1>Sign Up</h1>
+                    <p>It’s quick and easy.</p>
+                    <img
+                        src="https://static.xx.fbcdn.net/rsrc.php/v3/yX/r/TdCEremeWv5.png"
+                        onClick={this.props.closeRegister}
+                        id="closeRegister"
+                    ></img>
+                </div>
+                <div id="line-register"></div>
+                <form
+                    onSubmit={this.handleSubmit}
+                    className="registration-form"
+                >
+                    <div id="first-last-div">
+                        <div className="input-field-registration-names">
+                            <input
+                                onChange={this.handleChange}
+                                type="text"
+                                name="first"
+                                placeholder="First Name"
+                            />
+                        </div>
+                        <div className="input-field-registration-names">
+                            <input
+                                onChange={this.handleChange}
+                                type="text"
+                                name="last"
+                                placeholder="Last Name"
+                            />
+                        </div>
+                    </div>
+                    <div className="input-field-registration">
+                        <input
+                            onChange={this.handleChange}
+                            type="email"
+                            name="email"
+                            placeholder="E-Mail"
+                        />
+                    </div>
+                    <div className="input-field-registration">
+                        <input
+                            onChange={this.handleChange}
+                            type="password"
+                            name="password"
+                            placeholder="Password"
+                        />
+                    </div>
+                    <p id="terms-agree">
+                        By clicking Sign Up, you agree to our Terms. Learn how
+                        we collect, use and share your data in our Data Policy
+                        and how we use cookies and similar technology in our
+                        Cookies Policy. You may receive SMS Notifications from
+                        us and can opt out any time.
+                    </p>
+                    {this.state.error && <p>Oops, something went wrong!</p>}
+                    <button id="register-button">Sign Up</button>
                 </form>
-                <Link to="/login">Already have an Account? Log In</Link>
-            </>
+            </div>
         );
     }
 }

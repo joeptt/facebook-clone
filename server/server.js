@@ -12,6 +12,11 @@ const {
     checkForValidEmail,
     storePasswordCode,
     compareCodes,
+    storeBioOnDb,
+    updatingPassword,
+    searchUsersInput,
+    getUserById,
+    recentlyAddedUsers,
 } = require("../database/db");
 const { upload } = require("../s3");
 const cryptoRandomString = require("crypto-random-string");
@@ -65,8 +70,8 @@ app.post("/login", async (req, res) => {
     try {
         const user = await logInCheck(req.body);
         if (user) {
-            console.log("found user successfully", user);
             req.session.user_id = user.id;
+            req.session.recent_id = user.id;
             res.json({ success: true });
         } else {
             res.json({ success: false });
@@ -90,6 +95,7 @@ app.post("/register", async (req, res) => {
             const result = await storeUserOnDB(req.body);
             console.log("succesfully added user to db", result);
             req.session.user_id = result.id;
+            req.session.recent_id = result.id;
             res.json({ success: true });
         } catch (error) {
             console.log("error on adding Userinfo to DB -> ", error);
@@ -131,7 +137,6 @@ app.post("/reset-password", async (req, res) => {
         try {
             const validEmail = await checkForValidEmail(req.body);
             if (validEmail) {
-                console.log("mamamamamamam");
                 const secretCode = cryptoRandomString({
                     length: 4,
                 });
@@ -139,7 +144,7 @@ app.post("/reset-password", async (req, res) => {
                     secretCode,
                     req.body.email
                 );
-                console.log(storedCode);
+                console.log("Result from storing code on DB ->", storedCode);
                 res.json({ successStepOne: true });
             } else {
                 console.log("no valid email entered");
@@ -151,13 +156,33 @@ app.post("/reset-password", async (req, res) => {
         }
     } else if (req.body.currentStep === 2) {
         try {
-            console.log("on step two");
+            console.log("on step two", req.body);
             const result = await compareCodes(req.body);
             if (result) {
                 console.log("result from comparing ->", result);
-                res.json({ successStepTwo: true });
+                try {
+                    const hashed_password = await hashPassword(
+                        req.body.new_password
+                    );
+                    try {
+                        const resultStoringNewPw = await updatingPassword(
+                            hashed_password,
+                            req.session.user_id
+                        );
+                        console.log(
+                            "Result from storing new PW on DB -> ",
+                            resultStoringNewPw
+                        );
+                        res.json({ successStepTwo: true });
+                    } catch (error) {
+                        console.log("error updatuing password", error);
+                    }
+                } catch (error) {
+                    console.log("error on hashing password");
+                    res.json({ successStepTwo: false });
+                }
             } else {
-                console.log("no good result");
+                console.log("no good result step 2");
                 res.json({ successStepTwo: false });
             }
         } catch (err) {
@@ -167,10 +192,89 @@ app.post("/reset-password", async (req, res) => {
     }
 });
 
+// ---- > Route to store Bio on Database < ---- //
+app.post("/user/bio", async (req, res) => {
+    console.log(req.body);
+    try {
+        const result = await storeBioOnDb(req.body.bio, req.session.user_id);
+        console.log(result);
+        res.json(result);
+    } catch (error) {
+        console.log("error at adding bio to DB ->", error);
+    }
+});
+
+// ----> Route to fetch the users in search from < ---- //
+app.get("/api/find-people", async (req, res) => {
+    try {
+        if (req.query.search.length > 0) {
+            const result = await searchUsersInput(
+                req.query.search,
+                req.session.user_id
+            );
+            console.log("result from search->", result);
+            if (result !== null) res.json(result);
+        } else {
+            const result = await recentlyAddedUsers(req.session.user_id);
+            res.json(result);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+// ----> Route for individual user profile < ---- //
+app.get("/api/otherUser/:user_id", async (req, res) => {
+    try {
+        console.log("reg id", req.session.user_id);
+        console.log("Fetch to api user works", req.params.user_id);
+        if (req.session.user_id === +req.params.user_id) {
+            console.log("own user");
+            res.json({ error: "ownUser" });
+            return;
+        }
+        const result = await getUserById(req.params.user_id);
+        console.log("result", result);
+        if (!result) {
+            console.log("undefined");
+            res.json({ error: "notFound" });
+            return;
+        }
+        res.json(result);
+    } catch (error) {
+        console.log("Error in getting user by id -> ", error);
+        res.json({ error: "notFound" });
+    }
+});
+
+// --- > Recent Logins < --- //
+app.get("/recentLogins", async (req, res) => {
+    console.log("req.recent", req.session.recent_id);
+    if (!req.session.recent_id) {
+        res.json({ error: "noUserFound" });
+        return;
+    }
+    const result = await getUserById(req.session.recent_id);
+    console.log("result recent -> ", result);
+    if (!result) {
+        res.json({ error: "noUserFound" });
+        return;
+    }
+    res.json(result);
+});
+
+// ---- > Logout Route < ---- //
+app.get("/logout", (req, res) => {
+    console.log(req.session.user_id);
+    req.session.user_id = null;
+    console.log(req.session.user_id);
+    res.json({ success: true });
+});
+
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
 app.listen(process.env.PORT || 3001, function () {
-    console.log("I'm listening.");
+    console.log("I'm listening...");
 });

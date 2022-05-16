@@ -1,9 +1,9 @@
 * {
     box-sizing: border-box;
+    font-family: helvetica;
 }
 
 body {
-    background-color: ghostwhite;
     margin: 0;
 }
 
@@ -35,4 +35,326 @@ header {
     align-items: center;
     flex-direction: row;
     background-color: hotpink;
+}
+
+/* ---- LOGIN / REGISTRATION PAGE ----*/
+
+.registration-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.input-field-login {
+    font-size: 14px;
+    position: relative;
+    border-top: 18px solid transparent;
+}
+
+.input-field-login input {
+    margin: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    appearance: none;
+    padding: 12px;
+    border-radius: 4px;
+    width: 364px;
+    height: 52px;
+    font-size: 17px;
+}
+
+.input-field-login .placeholder {
+    font-size: 17px;
+    position: absolute;
+    left: 15px;
+    bottom: 50%;
+    top: 23px;
+    transform: translateY(-50%);
+    width: calc(100% - 24px);
+    color: #aaa;
+    text-overflow: ellipsis;
+    transition: top 0.3s ease, color 0.3s ease, font-size 0.3s ease;
+}
+
+.input-field-login input:focus + .placeholder {
+    top: -2px;
+    font-size: 12px;
+    color: rgba(34, 34, 34, 0.808);
+}
+
+input:not(:placeholder-shown) + .placeholder {
+    top: -2px;
+    font-size: 12px;
+    color: rgba(34, 34, 34, 0.808);
+}
+
+#login-button {
+    border: none;
+    appearance: none;
+    background: #156ee4;
+    padding: 12px;
+    border-radius: 5px;
+    width: 364px;
+    height: 52px;
+    color: white;
+    font-size: 20px;
+    margin-top: 15px;
+    transition: 0.4s;
+    cursor: pointer;
+}
+
+#login-button:hover {
+    scale: 1.01;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 2px 5px,
+        rgba(0, 0, 0, 0.23) 0px 1.5px 1.5px;
+}
+
+#login-button:focus {
+    scale: 1;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 15px 30px -6px inset,
+        rgba(0, 0, 0, 0.3) 0px 9px 18px -9px inset;
+}
+
+#already-have-account {
+    margin-top: 15px;
+    font-size: 12px;
+}
+
+#register-input-div {
+    background-color: white;
+    height: 450px;
+    width: 435px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%), 0 8px 16px rgb(0 0 0 / 10%);
+    border-radius: 8px;
+    position: absolute;
+    z-index: 2;
+}
+
+#login-input-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-direction: center;
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: rgba(17, 17, 26, 0.05) 0px 4px 16px,
+        rgba(17, 17, 26, 0.05) 0px 8px 32px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: white;
+}
+
+#login-page {
+    height: 90vh;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #eff2f5;
+}
+
+#break-line-login {
+    border: 0.5px solid rgba(0, 0, 0, 0.19);
+    width: 100%;
+    margin: 20px 16px;
+}
+
+#forgot-password-link {
+    color: #1877f2;
+    font-size: 14px;
+    font-weight: bolder;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+#forgot-password-link:hover {
+    text-decoration: underline;
+}
+
+#create-new-account {
+    background-color: #42b72a;
+    border: none;
+    border-radius: 6px;
+    font-size: 17px;
+    line-height: 48px;
+    padding: 0 16px;
+    color: white;
+    cursor: pointer;
+}
+
+#header-register {
+    height: 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 430px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#header-register h1 {
+    margin: 0;
+    margin-left: 15px;
+    margin-top: 5px;
+    color: #1c1e21;
+    font-size: 40px;
+    font-family: Helvetica;
+}
+#header-register p {
+    color: #1c1e21;
+    margin: 0;
+    margin-left: 15px;
+    font-family: Helvetica;
+}
+#header-register img {
+    margin: 0;
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+}
+
+#first-last-div {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-field-registration input {
+    border: none;
+    height: 40px;
+    background: #f5f6f7;
+    border: 1px solid #ccd0d5;
+    border-radius: 5px;
+    color: #1c1e21;
+    margin-bottom: 7px;
+    width: 402px;
+    padding-left: 10px;
+}
+
+.input-field-registration-names {
+    display: flex;
+    justify-content: center;
+}
+.input-field-registration-names input {
+    margin: 7px;
+    border: none;
+    height: 40px;
+    width: 194px;
+    background: #f5f6f7;
+    border: 1px solid #ccd0d5;
+    border-radius: 5px;
+    color: #1c1e21;
+    padding-left: 10px;
+}
+
+#line-register {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    width: 414px;
+    margin: 5px 0 10px 0;
+}
+
+#terms-agree {
+    font-size: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: rgba(17, 17, 26, 0.4);
+}
+
+#register-button {
+    margin-top: 40px;
+    width: 194px;
+    height: 36px;
+    background-color: #00a400;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0 32px;
+    font-weight: bolder;
+}
+
+/* ----- SEARCH BAR ------ */
+
+#search-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#search-input {
+    position: fixed;
+}
+
+#found-user {
+    position: absolute;
+    top: 80px;
+}
+
+.users-in-search {
+    display: flex;
+}
+
+.users-in-search img {
+    width: 50px;
+    height: 50px;
+}
+.users-in-search h3 {
+    margin-left: 5px;
+}
+
+.users-in-search:hover {
+    background-color: #42b72a;
+}
+
+.profile-picture-recent {
+    height: 160px;
+    width: 160px;
+    object-fit: cover;
+}
+
+#recent-login-profiles {
+    display: flex;
+}
+
+.images-recent-login {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 10px;
+    border: 0.3px solid rgba(0, 0, 0, 0.2);
+    transition: all 0.2s;
+}
+.images-recent-login img {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.images-recent-login p {
+    color: #1c1e21;
+    margin: 10px;
+    font-family: helvetica;
+}
+
+.images-recent-login:hover {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+#add-new-account {
+    color: #156ee4;
+}
+
+#facebook-logo {
+    height: 70px;
 }
