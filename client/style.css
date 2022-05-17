@@ -280,41 +280,6 @@ input:not(:placeholder-shown) + .placeholder {
     padding: 0 32px;
     font-weight: bolder;
 }
-
-/* ----- SEARCH BAR ------ */
-
-#search-bar {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-}
-
-#search-input {
-    position: fixed;
-}
-
-#found-user {
-    position: absolute;
-    top: 80px;
-}
-
-.users-in-search {
-    display: flex;
-}
-
-.users-in-search img {
-    width: 50px;
-    height: 50px;
-}
-.users-in-search h3 {
-    margin-left: 5px;
-}
-
-.users-in-search:hover {
-    background-color: #42b72a;
-}
-
 .profile-picture-recent {
     height: 160px;
     width: 160px;
@@ -326,7 +291,8 @@ input:not(:placeholder-shown) + .placeholder {
 }
 
 .images-recent-login {
-    margin-left: 10px;
+    position: relative;
+    margin-right: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -357,4 +323,150 @@ input:not(:placeholder-shown) + .placeholder {
 
 #facebook-logo {
     height: 70px;
+    margin: -20px;
+}
+
+#recent-logins h1 {
+    margin: 0;
+    margin-top: 14px;
+    font-size: 28px;
+    font-weight: normal;
+}
+#recent-logins-p {
+    margin: 0;
+    font-weight: normal;
+    color: #606770;
+    font-size: 15px;
+    line-height: 24px;
+    margin-bottom: 12px;
+}
+
+#login-components {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-evenly;
+}
+
+#languages {
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 12px;
+    width: 40%;
+}
+
+#languages li {
+    list-style-type: none;
+    color: #8a8d91;
+}
+
+#languages-div {
+    display: flex;
+    justify-content: center;
+}
+
+#facebook-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 60px;
+}
+
+#facebook-text img {
+    height: 106px;
+    margin: -28px;
+}
+#facebook-text h2 {
+    font-size: 28px;
+    font-weight: normal;
+    line-height: 32px;
+    width: 500px;
+}
+
+#x-button-recent {
+    position: absolute;
+    top: -9px;
+    left: 0px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.5);
+}
+/* ----- SEARCH BAR ------ */
+
+#search-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+#found-user {
+    position: absolute;
+    top: 80px;
+}
+
+.users-in-search {
+    display: flex;
+}
+
+.users-in-search img {
+    width: 50px;
+    height: 50px;
+}
+.users-in-search h3 {
+    margin-left: 5px;
+}
+
+.users-in-search:hover {
+    background-color: #42b72a;
+}
+
+/* ---- Homepage ----- */
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+#sidebar-left-homepage {
+    width: 20%;
+    height: 100%;
+    background-color: #42b72a;
+}
+
+#feed-homepage {
+    width: 60%;
+    height: 100%;
+}
+
+#sidebar-right-homepage {
+    width: 20%;
+    height: 100%;
+    background-color: #42b72a;
+}
+/* ---- Profile Page ---- */
+
+#cover-photo-profile {
+    height: 500px;
+    width: 100%;
+}
+
+#profile-page {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #00a400;
+}
+
+#profile-content {
+    width: 80%;
+    height: 80vh;
+}
+
+#profile-content img {
+    object-fit: cover;
 }

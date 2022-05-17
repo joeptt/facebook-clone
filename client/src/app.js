@@ -78,10 +78,10 @@ export default class App extends Component {
                     <div className="app">
                         <header>
                             <nav>Home</nav>
-                            <button onClick={this.onClickLogout}>LOGOUT</button>
                             <div>
                                 <FindPeople />
                             </div>
+                            <button onClick={this.onClickLogout}>LOGOUT</button>
                             <ProfilePicture
                                 profile_picture_url={
                                     this.state.profile_picture_url
@@ -89,7 +89,11 @@ export default class App extends Component {
                                 onClickImage={this.onClickImage}
                             />
                         </header>
-                        <main className="container"></main>
+                        <main className="container">
+                            <div id="sidebar-left-homepage"></div>
+                            <div id="feed-homepage"></div>
+                            <div id="sidebar-right-homepage"></div>
+                        </main>
 
                         <footer></footer>
                         {this.state.modalShown && (
@@ -105,6 +109,8 @@ export default class App extends Component {
                         {...this.state}
                         onUploadBio={this.onUploadBio}
                         profile_picture_url={this.state.profile_picture_url}
+                        closeModal={this.closeModal}
+                        onUpload={this.onUpload}
                     />
                 </Route>
                 <Route path="/user/:otherUserId">

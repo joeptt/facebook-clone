@@ -4,7 +4,7 @@ import Friendships from "./friendships";
 
 export default function OtherProfile() {
     const { otherUserId } = useParams();
-    const [err, setErr] = useState("");
+    //const [err, setErr] = useState("");
     const [user, setUser] = useState({});
     const history = useHistory();
 
@@ -14,7 +14,6 @@ export default function OtherProfile() {
         fetch(`/api/otherUser/${otherUserId}`)
             .then((res) => res.json())
             .then((user) => {
-                console.log(user);
                 if (!abort) {
                     if (user.error === "notFound") {
                         history.push("/");
@@ -24,9 +23,6 @@ export default function OtherProfile() {
                     }
                     setUser(user);
                     // #3.c the server tells us this is our own profile
-                    if (+otherUserId === 5) {
-                        history.push("/");
-                    }
                 }
             });
 
@@ -39,7 +35,7 @@ export default function OtherProfile() {
             <h1>HI i am otherProfile {user.first_name}</h1>
             <img src={user.profile_picture_url}></img>
             <h2>I will display a user picture and the users bio</h2>
-            <Friendships />
+            <Friendships otherUserId={otherUserId} />
         </>
     );
 }

@@ -9,6 +9,8 @@ export default class Login extends Component {
         this.state = {
             error: false,
             showRegistration: false,
+            showRecentLogins: false,
+            showFacebookText: true,
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,6 +37,18 @@ export default class Login extends Component {
         this.setState({
             showRegistration: false,
         });
+    }
+
+    async componentDidMount() {
+        const res = await fetch("/recent-login-available");
+        const result = await res.json();
+        console.log("Result from availablitly check-> ", result);
+        if (result.recentUser) {
+            this.setState({
+                showRecentLogins: true,
+                showFacebookText: false,
+            });
+        }
     }
 
     async handleSubmit(e) {
@@ -67,50 +81,97 @@ export default class Login extends Component {
 
     render() {
         return (
-            <div id="login-page">
-                {this.state.showRegistration && (
-                    <Registration closeRegister={this.closeRegister} />
-                )}
-                <RecentLogins />
-                {/* if there is cookies then show RecentLogins if not show Text saying no recent logins aavailabe  */}
-                <div id="login-input-div">
-                    <form onSubmit={this.handleSubmit}>
-                        <div className="input-field-login">
-                            <input
-                                onChange={this.handleChange}
-                                type="text"
-                                name="email"
-                                placeholder="&nbsp;"
-                            />
-                            <label htmlFor="email" className="placeholder">
-                                E-Mail
-                            </label>
-                        </div>
-                        <div className="input-field-login">
-                            <input
-                                onChange={this.handleChange}
-                                type="password"
-                                name="password"
-                                placeholder="&nbsp;"
-                            />
-                            <label htmlFor="password" className="placeholder">
-                                Password
-                            </label>
-                        </div>
-                        {this.state.error && <p>Oops, something went wrong!</p>}
-                        <button id="login-button">Log In</button>
-                    </form>
+            <>
+                <div id="login-page">
+                    <div id="login-components">
+                        {this.state.showRegistration && (
+                            <Registration closeRegister={this.closeRegister} />
+                        )}
 
-                    <Link to="/reset-password" id="forgot-password-link">
-                        Forgot password?{" "}
-                    </Link>
-                    <div id="break-line-login"></div>
-                    <button id="create-new-account" onClick={this.showRegister}>
-                        Create new account
-                    </button>
-                    <br></br>
+                        {this.state.showRecentLogins && (
+                            <RecentLogins showRegister={this.showRegister} />
+                        )}
+
+                        {this.state.showFacebookText && (
+                            <div id="facebook-text">
+                                <img src="https://static.xx.fbcdn.net/rsrc.php/y8/r/dF5SId3UHWd.svg" />
+                                <h2>
+                                    Connect with friends and the world <br></br>
+                                    around you on Facebook.
+                                </h2>
+                            </div>
+                        )}
+                        <div id="login-input-div">
+                            <form onSubmit={this.handleSubmit}>
+                                <div className="input-field-login">
+                                    <input
+                                        onChange={this.handleChange}
+                                        id="email"
+                                        type="text"
+                                        name="email"
+                                        placeholder="&nbsp;"
+                                    />
+                                    <label
+                                        htmlFor="email"
+                                        className="placeholder"
+                                    >
+                                        E-Mail
+                                    </label>
+                                </div>
+                                <div className="input-field-login">
+                                    <input
+                                        onChange={this.handleChange}
+                                        id="password"
+                                        type="password"
+                                        name="password"
+                                        placeholder="&nbsp;"
+                                    />
+                                    <label
+                                        htmlFor="password"
+                                        className="placeholder"
+                                    >
+                                        Password
+                                    </label>
+                                </div>
+                                {this.state.error && (
+                                    <p>Oops, something went wrong!</p>
+                                )}
+                                <button id="login-button">Log In</button>
+                            </form>
+
+                            <Link
+                                to="/reset-password"
+                                id="forgot-password-link"
+                            >
+                                Forgot password?{" "}
+                            </Link>
+                            <div id="break-line-login"></div>
+                            <button
+                                id="create-new-account"
+                                onClick={this.showRegister}
+                            >
+                                Create new account
+                            </button>
+                            <br></br>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div id="languages-div">
+                    <ul id="languages">
+                        <li>English (US)</li>
+                        <li>Deutsch</li>
+                        <li>Türkçe</li>
+                        <li>Polski</li>
+                        <li>Italiano</li>
+                        <li>Română</li>
+                        <li>Français</li>
+                        <li>Русский</li>
+                        <li>العربية</li>
+                        <li>Español</li>
+                        <li>Português</li>
+                    </ul>
+                </div>
+            </>
         );
     }
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function RecentLogins() {
+export default function RecentLogins({ showRegister }) {
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
@@ -15,9 +15,16 @@ export default function RecentLogins() {
             });
     }, []);
 
-    // send a request to route when mounted to see who was logged in last
-    // create array of previously logged in people
-    // maybe create DB fro them then just limit last 2
+    async function deleteRecentCookies() {
+        const res = await fetch("/delete-cookies");
+        const result = await res.json();
+        console.log("Result from Deleting Cookies -> ", result);
+        if (result.success) {
+            console.log("Deleted cookies succesfully");
+            location.reload();
+        }
+    }
+
     return (
         <div id="recent-logins">
             <img
@@ -26,10 +33,13 @@ export default function RecentLogins() {
             />
 
             <h1>Recent Logins</h1>
-            <p>Click your picture or add an account. </p>
+            <p id="recent-logins-p">Click your picture or add an account. </p>
             {users && (
                 <div id="recent-login-profiles">
                     <div className="images-recent-login">
+                        <p onClick={deleteRecentCookies} id="x-button-recent">
+                            x
+                        </p>
                         <img
                             className="profile-picture-recent"
                             src={
@@ -38,9 +48,9 @@ export default function RecentLogins() {
                                     : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                             }
                         />
-                        <p className="name-recent">{users.first_name}</p>
+                        <p id="name-recent">{users.first_name}</p>
                     </div>
-                    <div className="images-recent-login">
+                    <div onClick={showRegister} className="images-recent-login">
                         <img
                             className="profile-picture-recent"
                             src="https://i.ibb.co/CB3mb17/Bildschirmfoto-2022-05-13-um-18-32-39.png"

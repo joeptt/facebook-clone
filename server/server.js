@@ -17,6 +17,11 @@ const {
     searchUsersInput,
     getUserById,
     recentlyAddedUsers,
+    getFriendshipStatus,
+    deleteRowFromFriendships,
+    addRequestToFriendships,
+    acceptFriendship,
+    endFriendship,
 } = require("../database/db");
 const { upload } = require("../s3");
 const cryptoRandomString = require("crypto-random-string");
@@ -269,6 +274,72 @@ app.get("/logout", (req, res) => {
     req.session.user_id = null;
     console.log(req.session.user_id);
     res.json({ success: true });
+});
+
+// ---- > check friendship status < ---- //
+app.get("/friendship-status/:otherUserId", async (req, res) => {
+    const otherUserId = req.params.otherUserId;
+    const ownUserId = req.session.user_id;
+
+    const result = await getFriendshipStatus(ownUserId, otherUserId);
+    console.log("Friendship status: ", result);
+    if (!result) {
+        res.json({ error: "noRelationshipYet" });
+        return;
+    }
+    res.json(result);
+});
+
+// ----> Route for Friedship button Action <---- //
+app.post("/friendship-button", async (req, res) => {
+    const { buttonLabel, otherUserId } = req.body;
+    const ownUserId = req.session.user_id;
+    if (buttonLabel === "Cancel Request") {
+        const result = await deleteRowFromFriendships(ownUserId, otherUserId);
+        console.log(result);
+        res.json({ canceled: true });
+        return;
+    }
+
+    if (buttonLabel === "Add Friend") {
+        const result = await addRequestToFriendships(ownUserId, otherUserId);
+        console.log(result);
+        res.json({ added: true });
+        return;
+    }
+
+    if (buttonLabel === "Accept Request") {
+        const result = await acceptFriendship(ownUserId, otherUserId);
+        console.log(result);
+        res.json({ accepted: true });
+        return;
+    }
+
+    if (buttonLabel === "End Friendship") {
+        const result = await endFriendship(ownUserId, otherUserId);
+        console.log(result);
+        res.json({ ended: true });
+        return;
+    }
+});
+
+// ----> Route to check if there is recent user cookies stores < ---- //
+app.get("/recent-login-available", (req, res) => {
+    if (req.session.recent_id) {
+        res.json({ recentUser: true });
+    } else {
+        res.json({ recentUser: false });
+    }
+});
+
+// ---- > Route to delete recent cookies < ---- //
+app.get("/delete-cookies", (req, res) => {
+    try {
+        req.session.recent_id = null;
+        res.json({ success: true });
+    } catch (error) {
+        console.log("error at deleting cookies -> ", error);
+    }
 });
 
 app.get("*", function (req, res) {

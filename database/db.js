@@ -155,3 +155,55 @@ module.exports.getUserById = function (user_id) {
     `;
     return db.query(query, params).then((result) => result.rows[0]);
 };
+
+module.exports.getFriendshipStatus = function (ownUser, otherUser) {
+    const params = [ownUser, otherUser];
+    const query = `
+        SELECT * FROM friendships
+        WHERE (recipient_id = $1 AND sender_id = $2)
+        OR (recipient_id = $2 AND sender_id = $1);
+    `;
+    return db.query(query, params).then((result) => result.rows[0]);
+};
+
+module.exports.deleteRowFromFriendships = function (ownUser, otherUser) {
+    const params = [ownUser, otherUser];
+    const query = `
+        DELETE FROM friendships 
+        WHERE sender_id = $1 AND recipient_id = $2
+        RETURNING *
+    `;
+    return db.query(query, params).then((result) => result.rows[0]);
+};
+
+module.exports.addRequestToFriendships = function (ownUser, otherUser) {
+    const params = [ownUser, otherUser];
+    const query = `
+        INSERT INTO friendships (sender_id, recipient_id, accepted)
+        VALUES ($1, $2, false)
+        RETURNING *
+    `;
+    return db.query(query, params).then((result) => result.rows[0]);
+};
+
+module.exports.acceptFriendship = function (ownUser, otherUser) {
+    const params = [ownUser, otherUser];
+    const query = `
+        UPDATE friendships
+        SET accepted = true
+        WHERE (recipient_id = $1 AND sender_id = $2)
+        OR (recipient_id = $2 AND sender_id = $1); 
+    `;
+    return db.query(query, params).then((result) => result.rows[0]);
+};
+
+module.exports.endFriendship = function (ownUser, otherUser) {
+    const params = [ownUser, otherUser];
+    const query = `
+        UPDATE friendships
+        SET accepted = false
+        WHERE (recipient_id = $1 AND sender_id = $2)
+        OR (recipient_id = $2 AND sender_id = $1); 
+    `;
+    return db.query(query, params).then((result) => result.rows[0]);
+};

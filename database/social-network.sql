@@ -13,8 +13,15 @@ CREATE TABLE users (
 );
 
 CREATE TABLE password_reset_codes (
-    id              SERIAL PRIMARY KEY,
-    code            VARCHAR(6) NOT NULL,
-    email           VARCHAR(50) NOT NULL,
-    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id SERIAL PRIMARY KEY,
+    code VARCHAR(6) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE friendships (   
+  id SERIAL PRIMARY KEY,
+  sender_id INT REFERENCES users(id) NOT NULL,
+  recipient_id INT REFERENCES users(id) NOT NULL,
+  accepted BOOLEAN DEFAULT false
 );
