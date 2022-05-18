@@ -1,20 +1,20 @@
-export default function ProfileModal({ onCloseClick, onUpload }) {
+export default function ProfileModal({ onCloseClick, onUploadCover }) {
     async function onSubmit(event) {
         try {
             event.preventDefault();
-            console.log(event.target.image.files[0]);
+            console.log("coverPhoto ->", event.target.image.files[0]);
 
             const formData = new FormData();
-            formData.append("image", event.target.image.files[0]);
-            console.log(formData);
-            const res = await fetch("/user/uploadImage", {
+            formData.append("cover", event.target.image.files[0]);
+
+            const res = await fetch("/user/uploadCoverPhoto", {
                 method: "POST",
                 body: formData,
             });
             console.log("res --> ", res);
             const imgUrl = await res.json();
             console.log("imageUrl -->>>", imgUrl);
-            onUpload(imgUrl);
+            onUploadCover(imgUrl);
         } catch (err) {
             console.log("error at sending image to server", err);
         }
@@ -30,7 +30,7 @@ export default function ProfileModal({ onCloseClick, onUpload }) {
                 &times;
             </button>
             <div className="modal-content">
-                <h2>Upload profile picture</h2>
+                <h2>Upload cover picture</h2>
                 <form onSubmit={onSubmit}>
                     <input
                         onChange={onChange}

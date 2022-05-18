@@ -33,6 +33,7 @@ export default class Login extends Component {
             showRegistration: true,
         });
     }
+
     closeRegister() {
         this.setState({
             showRegistration: false,

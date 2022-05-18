@@ -24,6 +24,17 @@ export default function RecentLogins({ showRegister }) {
             location.reload();
         }
     }
+    // Write a fetch on click of recent login img to set the req.session.user_id to req.session.recent_id
+    ///---------
+    async function onClickRecentImage() {
+        const res = await fetch("/set-recent-login");
+        const result = await res.json();
+        console.log("SUCCESS", result);
+        if (result.success) {
+            console.log("SUCCESS");
+            location.reload();
+        }
+    }
 
     return (
         <div id="recent-logins">
@@ -41,6 +52,7 @@ export default function RecentLogins({ showRegister }) {
                             x
                         </p>
                         <img
+                            onClick={onClickRecentImage}
                             className="profile-picture-recent"
                             src={
                                 users.profile_picture_url

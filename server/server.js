@@ -22,6 +22,7 @@ const {
     addRequestToFriendships,
     acceptFriendship,
     endFriendship,
+    addCoverPhoto,
 } = require("../database/db");
 const { upload } = require("../s3");
 const cryptoRandomString = require("crypto-random-string");
@@ -339,6 +340,32 @@ app.get("/delete-cookies", (req, res) => {
         res.json({ success: true });
     } catch (error) {
         console.log("error at deleting cookies -> ", error);
+    }
+});
+
+// ---- > Route to upload Cover Photo < ---- //
+app.post(
+    "/user/uploadCoverPhoto",
+    uploader.single("cover"),
+    upload,
+    async (req, res) => {
+        console.log("CONNECTION WORKS", req.body);
+        const imgUrl = req.body.imgUrl;
+        const user_id = req.session.user_id;
+        const result = await addCoverPhoto(imgUrl, user_id);
+        console.log("COVER Photo Added to DB");
+        res.json(result);
+    }
+);
+
+// ---- > Route for recent login < ---- //
+app.get("/set-recent-login", (req, res) => {
+    console.log("set login works");
+    try {
+        req.session.user_id = req.session.recent_id;
+        res.json({ success: true });
+    } catch (error) {
+        console.log(error);
     }
 });
 

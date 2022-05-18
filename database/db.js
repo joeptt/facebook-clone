@@ -207,3 +207,14 @@ module.exports.endFriendship = function (ownUser, otherUser) {
     `;
     return db.query(query, params).then((result) => result.rows[0]);
 };
+
+module.exports.addCoverPhoto = function (imgUrl, user_id) {
+    const query = `
+        UPDATE users 
+        SET cover_picture_url = $1
+        WHERE id = $2
+        RETURNING *
+    `;
+    const params = [imgUrl, user_id];
+    return db.query(query, params).then((result) => result.rows[0]);
+};

@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS friendships;
 DROP TABLE IF EXISTS password_reset_codes;
 DROP TABLE IF EXISTS users;
 
@@ -7,6 +8,7 @@ CREATE TABLE users (
     last_name VARCHAR NOT NULL CHECK (last_name != ''),
     email VARCHAR NOT NULL UNIQUE CHECK (email != ''),
     profile_picture_url TEXT,
+    cover_picture_url TEXT,
     bio TEXT,
     password_hashed VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT NOW() 
