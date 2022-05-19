@@ -41,7 +41,7 @@ export default function FindPeople() {
             <input
                 id="search-input"
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder={"Search"}
+                placeholder="Search Facebook"
             />
 
             <div id="found-user">

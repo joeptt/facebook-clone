@@ -8,9 +8,11 @@ body {
 }
 
 #profilePictureHeader {
-    height: 50px;
-    width: 50px;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
     cursor: pointer;
+    object-fit: cover;
 }
 
 .modal {
@@ -26,16 +28,158 @@ body {
     justify-content: center;
     z-index: 10;
 }
-
+/* ---- NavBar ---- */
 header {
     display: flex;
     padding-left: 10px;
     padding-right: 10px;
     height: 56px;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     flex-direction: row;
-    background-color: hotpink;
+    background-color: white;
+    width: 100%;
+}
+
+.header-divs-search {
+    height: 100%;
+    display: flex;
+    width: 33%;
+    align-items: center;
+}
+
+.header-divs-icons {
+    height: 100%;
+    display: flex;
+    width: 33%;
+    align-items: center;
+    justify-content: space-between;
+}
+.header-divs-logout {
+    height: 100%;
+    display: flex;
+    width: 33%;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.facebook-icon-navbar {
+    height: 70%;
+}
+
+.icon-navbar {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icons {
+    width: 150px;
+    height: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.icons:hover {
+    background-color: #eff2f5;
+}
+
+.icon-notification {
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: #eff2f5;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.icon-menu {
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: #eff2f5;
+    cursor: pointer;
+}
+.icon-notification:hover {
+    background-color: #dcdfe2;
+}
+
+.icon-menu:hover {
+    background-color: #dcdfe2;
+}
+.icon-notification-svg {
+    height: 40%;
+}
+.icon-menu-svg {
+    height: 60%;
+}
+
+#name-navbar {
+    font-family: helvetica;
+    font-size: 14px;
+    margin-left: 8px;
+    margin-right: 20px;
+    text-decoration: none;
+}
+
+.profile-image-name {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #dae7f2;
+    height: 60%;
+    border-radius: 50px;
+    padding: 3px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.profile-image-name p {
+    color: #156ee4;
+}
+
+.profile-image-name:hover {
+    background-color: #d6e0e7;
+}
+
+#link-to-home {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.drop-down {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    width: 200px;
+    height: 200px;
+    right: 10px;
+    border-radius: 10px;
+}
+
+.log-out-button {
+    border: none;
+    border-radius: 10px;
+    background-color: #eff2f5;
+    height: 40px;
+    width: 100px;
+    cursor: pointer;
 }
 
 /* ---- LOGIN / REGISTRATION PAGE ----*/
@@ -404,9 +548,28 @@ input:not(:placeholder-shown) + .placeholder {
     align-items: flex-start;
 }
 
+#search-input {
+    height: 40px;
+    width: 250px;
+    margin-left: 10px;
+    border-radius: 40px;
+    border: none;
+    background-color: #eff2f5;
+    padding-left: 30px;
+    font-family: helvetica;
+    font-size: 15px;
+    font-weight: lighter;
+}
 #found-user {
     position: absolute;
-    top: 80px;
+    top: 55px;
+    left: 62px;
+    width: 250px;
+    z-index: 200;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+        rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+        rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
 
 .users-in-search {
@@ -441,6 +604,7 @@ input:not(:placeholder-shown) + .placeholder {
 #feed-homepage {
     width: 60%;
     height: 100%;
+    background-color: #156ee4;
 }
 
 #sidebar-right-homepage {
@@ -456,21 +620,75 @@ input:not(:placeholder-shown) + .placeholder {
     object-fit: cover;
 }
 
+.wall-posts {
+    margin-left: 30px;
+    margin-top: 20px;
+    width: 55%;
+    height: 200px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
 #profile-page {
     width: 100%;
-    background-color: #eff2f5;
+    background: linear-gradient(
+        180deg,
+        rgba(184, 187, 186, 1) 0%,
+        rgba(242, 241, 237, 1) 51%,
+        rgba(255, 255, 255, 1) 100%
+    );
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 #profile-content {
-    width: 80%;
+    width: 90%;
     height: 80vh;
 }
 
 #profile-content img {
     object-fit: cover;
+}
+
+.profile-whole {
+    height: 100vh;
+    width: 100vw;
+}
+
+.profile-bottompart {
+    background-color: #eff2f5;
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+}
+
+.bio-editior-div {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 30px;
+    border-radius: 5px;
+    width: 30%;
+    margin-left: 82px;
+    margin-top: 20px;
+    height: 200px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.edit-bio-button {
+    width: 100%;
+    height: 40px;
+    background-color: #eff2f5;
+    border: none;
+    cursor: pointer;
+}
+
+.bio-form {
+    display: flex;
+    flex-direction: column;
 }
 
 .cover-div {
@@ -482,17 +700,50 @@ input:not(:placeholder-shown) + .placeholder {
     bottom: 10px;
     right: 10px;
 }
+.cover-div img {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
 
 .profile-picture-div {
+    position: absolute;
     display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: -50px;
+    margin-left: 30px;
+    width: 86%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
 
 .profile-picture-div img {
     margin-right: 20px;
+}
+.profile-picture-div h3 {
+    font-size: 20px;
 }
 
 .profile-picture-onprofile {
     height: 168px;
     width: 168px;
     border-radius: 50%;
+    border: 5px solid white;
+}
+
+.friends-container {
+    display: flex;
+}
+
+.friends-container img {
+    height: 100px;
+    width: 100px;
+}
+
+.wannabes-container {
+    display: flex;
+}
+.wannabes-container img {
+    height: 100px;
+    width: 100px;
 }

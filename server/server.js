@@ -23,6 +23,7 @@ const {
     acceptFriendship,
     endFriendship,
     addCoverPhoto,
+    getAllFriendsAndWannabes,
 } = require("../database/db");
 const { upload } = require("../s3");
 const cryptoRandomString = require("crypto-random-string");
@@ -367,6 +368,14 @@ app.get("/set-recent-login", (req, res) => {
     } catch (error) {
         console.log(error);
     }
+});
+
+// ----> Route to get all friends and wannabe friends from DB <---- //
+app.get("/friends-and-wannabes", async (req, res) => {
+    console.log("TRYING TO GET FRIENDS AND WANNABES");
+    const result = await getAllFriendsAndWannabes(req.session.user_id);
+    console.log("Result from Query -> ", result);
+    res.json(result);
 });
 
 app.get("*", function (req, res) {

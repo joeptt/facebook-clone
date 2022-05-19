@@ -13,6 +13,7 @@ export default function Profile({
     bio,
     onUpload,
     onUploadCover,
+    onClickLogout,
 }) {
     const [modal, setModal] = useState({
         profileModalShown: false,
@@ -32,39 +33,52 @@ export default function Profile({
     }
     return (
         <>
-            <Navbar />
-            <div id="profile-page">
-                <div id="profile-content">
-                    {modal.coverModalShown && (
-                        <CoverModal
-                            onUploadCover={onUploadCover}
-                            onCloseClick={onCloseClick}
-                        />
-                    )}
-                    {modal.profileModalShown && (
-                        <ProfileModal
-                            onUpload={onUpload}
-                            onCloseClick={onCloseClick}
-                        />
-                    )}
-                    <div className="cover-div">
-                        <img src={cover_picture_url} id="cover-photo-profile" />
-                        <button onClick={onClickCoverPhoto}>
-                            Change Cover Photo
-                        </button>
+            <Navbar
+                onClickLogout={onClickLogout}
+                first_name={first_name}
+                profile_picture_url={profile_picture_url}
+            />
+            <div className="profile-whole">
+                <div id="profile-page">
+                    <div id="profile-content">
+                        {modal.coverModalShown && (
+                            <CoverModal
+                                onUploadCover={onUploadCover}
+                                onCloseClick={onCloseClick}
+                            />
+                        )}
+                        {modal.profileModalShown && (
+                            <ProfileModal
+                                onUpload={onUpload}
+                                onCloseClick={onCloseClick}
+                            />
+                        )}
+                        <div className="cover-div">
+                            <img
+                                src={cover_picture_url}
+                                id="cover-photo-profile"
+                            />
+                            <button onClick={onClickCoverPhoto}>
+                                Change Cover Photo
+                            </button>
+                        </div>
+                        <div className="profile-picture-div">
+                            <img
+                                src={profile_picture_url}
+                                onClick={onProfileImgClick}
+                                className="profile-picture-onprofile"
+                            ></img>
+                            <h3>
+                                {first_name} {last_name}
+                            </h3>
+                        </div>
                     </div>
-                    <div className="profile-picture-div">
-                        <img
-                            src={profile_picture_url}
-                            onClick={onProfileImgClick}
-                            className="profile-picture-onprofile"
-                        ></img>
-                        <h3>
-                            {first_name} {last_name}
-                        </h3>
+                </div>
+                <div className="profile-bottompart">
+                    <div className="bio-editior-div">
+                        <BioEditor bio={bio} onUploadBio={onUploadBio} />
                     </div>
-
-                    <BioEditor bio={bio} onUploadBio={onUploadBio} />
+                    <div className="wall-posts"></div>
                 </div>
             </div>
         </>

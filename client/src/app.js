@@ -1,10 +1,11 @@
 import { Component } from "react";
 import Profile from "./profile";
-import ProfilePicture from "./profilePicture";
+//wimport ProfilePicture from "./profilePicture";
 import { BrowserRouter, Route } from "react-router-dom";
-import FindPeople from "./findPeople";
+//import FindPeople from "./findPeople";
 import OtherProfile from "./otherProfile";
 import Navbar from "./navbar";
+import Friends from "./friends";
 
 export default class App extends Component {
     constructor() {
@@ -87,6 +88,12 @@ export default class App extends Component {
     render() {
         return (
             <BrowserRouter>
+                <Route exact path="/friends">
+                    <Friends
+                        onClickLogout={this.onClickLogout}
+                        {...this.state}
+                    />
+                </Route>
                 <Route exact path="/">
                     <div className="app">
                         <Navbar
@@ -110,6 +117,7 @@ export default class App extends Component {
                         closeModal={this.closeModal}
                         onUpload={this.onUpload}
                         onUploadCover={this.onUploadCover}
+                        onClickLogout={this.onClickLogout}
                     />
                 </Route>
                 <Route path="/user/:otherUserId">

@@ -170,7 +170,8 @@ module.exports.deleteRowFromFriendships = function (ownUser, otherUser) {
     const params = [ownUser, otherUser];
     const query = `
         DELETE FROM friendships 
-        WHERE sender_id = $1 AND recipient_id = $2
+        WHERE (recipient_id = $1 AND sender_id = $2)
+        OR (recipient_id = $2 AND sender_id = $1)
         RETURNING *
     `;
     return db.query(query, params).then((result) => result.rows[0]);
@@ -200,8 +201,7 @@ module.exports.acceptFriendship = function (ownUser, otherUser) {
 module.exports.endFriendship = function (ownUser, otherUser) {
     const params = [ownUser, otherUser];
     const query = `
-        UPDATE friendships
-        SET accepted = false
+        DELETE FROM friendships
         WHERE (recipient_id = $1 AND sender_id = $2)
         OR (recipient_id = $2 AND sender_id = $1); 
     `;
@@ -217,4 +217,17 @@ module.exports.addCoverPhoto = function (imgUrl, user_id) {
     `;
     const params = [imgUrl, user_id];
     return db.query(query, params).then((result) => result.rows[0]);
+};
+
+module.exports.getAllFriendsAndWannabes = function (user_id) {
+    const query = `
+        SELECT users.id, first_name, last_name, profile_picture_url, accepted
+        FROM friendships
+        JOIN users
+        ON (accepted = false AND recipient_id = $1 AND sender_id = users.id)
+        OR (accepted = true AND recipient_id = $1 AND sender_id = users.id)
+        OR (accepted = true AND sender_id = $1 AND recipient_id = users.id)
+    `;
+    const params = [user_id];
+    return db.query(query, params).then((result) => result.rows);
 };

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export default function Friendships({ otherUserId }) {
-    const [buttonLabel, setButtonLabel] = useState("TEST");
+    const [buttonLabel, setButtonLabel] = useState("");
 
     useEffect(() => {
         fetch(`/friendship-status/${otherUserId}`)
@@ -29,6 +29,7 @@ export default function Friendships({ otherUserId }) {
     }, []);
 
     async function onClickFriendshipButton(e) {
+        console.log("clicked friendship button");
         e.preventDefault();
         try {
             const res = await fetch("/friendship-button", {

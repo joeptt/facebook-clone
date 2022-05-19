@@ -46,22 +46,36 @@ export default class BioEditor extends Component {
     render() {
         if (this.state.isEditing) {
             return (
-                <form onSubmit={this.onSubmit}>
+                <form className="bio-form" onSubmit={this.onSubmit}>
                     <textarea
+                        className="bio-textarea"
                         name="bioArea"
                         placeholder="enter bio.."
                     ></textarea>
-                    <button onClick={this.closeEditor} type="button">
-                        Cancel
-                    </button>
-                    <button>Send</button>
+                    <div>
+                        <button
+                            className="bio-button"
+                            onClick={this.closeEditor}
+                            type="button"
+                        >
+                            Cancel
+                        </button>
+                        <button className="bio-button">Send</button>
+                    </div>
                 </form>
             );
         } else {
             return (
                 <>
-                    <p>{this.props.bio}</p>
-                    <button onClick={this.openEditor}>Edit Bio</button>
+                    <div>
+                        <p className="bio-text">{this.props.bio}</p>
+                        <button
+                            className="edit-bio-button"
+                            onClick={this.openEditor}
+                        >
+                            Edit Bio
+                        </button>
+                    </div>
                 </>
             );
         }
