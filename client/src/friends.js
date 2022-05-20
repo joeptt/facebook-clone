@@ -10,6 +10,7 @@ import Navbar from "./navbar";
 export default function Friends({
     onClickLogout,
     first_name,
+    last_name,
     profile_picture_url,
 }) {
     const dispatch = useDispatch();
@@ -80,33 +81,59 @@ export default function Friends({
                 first_name={first_name}
                 profile_picture_url={profile_picture_url}
             />
-            <div className="friends-container">
-                {friends &&
-                    friends.map((item) => {
-                        return (
-                            <div key={item.id}>
-                                <img src={item.profile_picture_url} />
-                                <p>{item.first_name}</p>
-                                <button onClick={() => onClickEnd(item.id)}>
-                                    End Friendship
-                                </button>
-                            </div>
-                        );
-                    })}
-            </div>
             <div className="wannabes-container">
-                {wannabes &&
-                    wannabes.map((item) => {
-                        return (
-                            <div key={item.id}>
-                                <img src={item.profile_picture_url} />
-                                <p>{item.first_name}</p>
-                                <button onClick={() => onClickAccept(item.id)}>
-                                    Accept Request
-                                </button>
-                            </div>
-                        );
-                    })}
+                <h1>Friend Requests</h1>
+                <div className="friend-requests-div">
+                    {wannabes &&
+                        wannabes.map((item) => {
+                            return (
+                                <>
+                                    <div
+                                        className="users-friendship"
+                                        key={item.id}
+                                    >
+                                        <img src={item.profile_picture_url} />
+                                        <p>
+                                            {item.first_name}&nbsp;
+                                            {item.last_name}
+                                        </p>
+                                        <button
+                                            className="accept-friendship-button"
+                                            onClick={() =>
+                                                onClickAccept(item.id)
+                                            }
+                                        >
+                                            Accept Request
+                                        </button>
+                                    </div>
+                                </>
+                            );
+                        })}
+                </div>
+            </div>
+            <div className="line-break-friendships"></div>
+            <div className="friends-container">
+                <h1>Friends</h1>
+                <div className="friend-requests-div">
+                    {friends &&
+                        friends.map((item) => {
+                            return (
+                                <div className="users-friendship" key={item.id}>
+                                    <img src={item.profile_picture_url} />
+                                    <p>
+                                        {item.first_name}&nbsp;
+                                        {item.last_name}
+                                    </p>
+                                    <button
+                                        className="end-friendship-button"
+                                        onClick={() => onClickEnd(item.id)}
+                                    >
+                                        End Friendship
+                                    </button>
+                                </div>
+                            );
+                        })}
+                </div>
             </div>
         </>
     );

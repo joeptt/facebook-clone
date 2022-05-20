@@ -24,9 +24,13 @@ const {
     endFriendship,
     addCoverPhoto,
     getAllFriendsAndWannabes,
+    getRecentChatMessage,
+    storeMessageOnDb,
 } = require("../database/db");
 const { upload } = require("../s3");
+const { Server } = require("http");
 const cryptoRandomString = require("crypto-random-string");
+const server = Server(app);
 
 // ---- > Multer Setup < ---- //
 const uidSafe = require("uid-safe");
@@ -59,13 +63,12 @@ app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "..", "client", "public")));
-app.use(
-    cookieSession({
-        sameSite: true,
-        secret: "Bananas",
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-    })
-);
+const cookieSessionMiddleware = cookieSession({
+    secret: "...",
+    maxAge: 1000 * 60 * 60 * 24 * 14,
+    sameSite: true,
+});
+app.use(cookieSessionMiddleware);
 
 // ---- > Server Routes < ----//
 app.get("/user/id.json", (req, res) => {
@@ -378,10 +381,47 @@ app.get("/friends-and-wannabes", async (req, res) => {
     res.json(result);
 });
 
+// ---- > socket setup < ---- //
+const io = require("socket.io")(server, {
+    allowRequest: (request, callback) =>
+        callback(
+            null,
+            request.headers.referer.startsWith(`http://localhost:3000`)
+        ),
+});
+io.use((socket, next) =>
+    cookieSessionMiddleware(socket.request, socket.request.res, next)
+);
+
+io.on("connection", async (socket) => {
+    const { user_id } = socket.request.session;
+    console.log("Incoming socket connection", socket.id);
+    // get recent messages and sent to client
+    const recentChatMessages = await getRecentChatMessage();
+    console.log(recentChatMessages);
+    socket.emit("recentMessages", recentChatMessages);
+
+    // store new message in DB and then send new message to chat
+    socket.on("sendMessage", async (text) => {
+        const sender = await getUserById(user_id);
+        const message = await storeMessageOnDb({
+            sender_id: user_id,
+            text: text,
+        });
+        console.log(message);
+        io.emit("newMessage", {
+            first_name: sender.first_name,
+            last_name: sender.last_name,
+            profile_picture_url: sender.profile_picture_url,
+            ...message,
+        });
+    });
+});
+
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-app.listen(process.env.PORT || 3001, function () {
+server.listen(process.env.PORT || 3001, function () {
     console.log("I'm listening...");
 });

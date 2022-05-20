@@ -25,21 +25,27 @@ export default function ProfileModal({ onCloseClick, onUploadCover }) {
     }
 
     return (
-        <div className="modal">
+        <div className="cover-modal">
             <button className="close" onClick={onCloseClick}>
                 &times;
             </button>
             <div className="modal-content">
-                <h2>Upload cover picture</h2>
-                <form onSubmit={onSubmit}>
+                <form className="cover-modal-form" onSubmit={onSubmit}>
+                    <label
+                        className="button-choosefile"
+                        htmlFor="input-cover-modal"
+                    >
+                        Choose File
+                    </label>
                     <input
+                        id="input-cover-modal"
                         onChange={onChange}
                         type="file"
                         required
                         name="image"
                         accept="image/*"
                     />
-                    <button>Upload</button>
+                    <button className="upload-button">Upload</button>
                 </form>
             </div>
         </div>

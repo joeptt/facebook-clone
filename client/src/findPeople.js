@@ -47,7 +47,11 @@ export default function FindPeople() {
             <div id="found-user">
                 {users.map((user) => {
                     return (
-                        <Link to={`/user/${user.id}`} key={user.id}>
+                        <Link
+                            to={`/user/${user.id}`}
+                            key={user.id}
+                            className="link-found-user"
+                        >
                             <div className="users-in-search">
                                 <img
                                     src={

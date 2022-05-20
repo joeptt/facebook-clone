@@ -6,6 +6,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import OtherProfile from "./otherProfile";
 import Navbar from "./navbar";
 import Friends from "./friends";
+import Chat from "./groupChat";
 
 export default class App extends Component {
     constructor() {
@@ -88,6 +89,9 @@ export default class App extends Component {
     render() {
         return (
             <BrowserRouter>
+                <Route exact path="/group-chat">
+                    <Chat />
+                </Route>
                 <Route exact path="/friends">
                     <Friends
                         onClickLogout={this.onClickLogout}
@@ -121,7 +125,10 @@ export default class App extends Component {
                     />
                 </Route>
                 <Route path="/user/:otherUserId">
-                    <OtherProfile />
+                    <OtherProfile
+                        onClickLogout={this.onClickLogout}
+                        {...this.state}
+                    />
                 </Route>
             </BrowserRouter>
         );

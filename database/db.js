@@ -231,3 +231,26 @@ module.exports.getAllFriendsAndWannabes = function (user_id) {
     const params = [user_id];
     return db.query(query, params).then((result) => result.rows);
 };
+
+module.exports.getRecentChatMessage = function () {
+    return db
+        .query(
+            `
+            SELECT chat_messages.*, users.first_name, users.last_name, users.profile_picture_url
+            FROM chat_messages
+            JOIN users
+            ON users.id = chat_messages.sender_id`
+        )
+        .then((result) => result.rows);
+};
+
+module.exports.storeMessageOnDb = function (sender_id) {
+    console.log("this is sender_id", sender_id.sender_id);
+    const query = `
+        INSERT INTO chat_messages (sender_id, text)
+        VALUES ($1, $2)
+        RETURNING *
+    `;
+    const params = [sender_id.sender_id, sender_id.text];
+    return db.query(query, params).then((result) => result.rows[0]);
+};

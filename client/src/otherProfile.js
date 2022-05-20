@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
+import Navbar from "./navbar";
 import Friendships from "./friendships";
 
-export default function OtherProfile() {
+export default function OtherProfile({
+    profile_picture_url,
+    first_name,
+    onClickLogout,
+}) {
     const { otherUserId } = useParams();
     //const [err, setErr] = useState("");
     const [user, setUser] = useState({});
@@ -32,10 +37,40 @@ export default function OtherProfile() {
     }, []);
     return (
         <>
-            <h1>HI i am otherProfile {user.first_name}</h1>
-            <img src={user.profile_picture_url}></img>
-            <h2>I will display a user picture and the users bio</h2>
-            <Friendships otherUserId={otherUserId} />
+            <Navbar
+                onClickLogout={onClickLogout}
+                first_name={first_name}
+                profile_picture_url={profile_picture_url}
+            />
+
+            <div className="profile-whole">
+                <div id="profile-page">
+                    <div id="profile-content">
+                        <div className="cover-div">
+                            <img
+                                src={
+                                    user.cover_picture_url
+                                        ? user.cover_picture_url
+                                        : "https://images4.alphacoders.com/114/thumb-1920-1141357.jpg"
+                                }
+                                id="cover-photo-profile"
+                            />
+                        </div>
+                        <div className="profile-picture-div">
+                            <img
+                                src={user.profile_picture_url}
+                                className="profile-picture-onprofile"
+                            ></img>
+                            <h3>
+                                {user.first_name} {user.last_name}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div className="profile-bottompart">
+                    <div className="bio-editior-div">{user.bio}</div>
+                </div>
+            </div>
         </>
     );
 }

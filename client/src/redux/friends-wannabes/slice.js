@@ -1,7 +1,7 @@
 // Reducer ------------------------------------------
 export function friendsAndWannabesReducer(friendsAndWannabes = [], action) {
     if (action.type === "friendsAndWannabes/received") {
-        friendsAndWannabes = [...friendsAndWannabes, ...action.payload.users];
+        friendsAndWannabes = [...action.payload.users];
     } else if (action.type === "friendsAndWannabees/unfriended") {
         friendsAndWannabes = friendsAndWannabes.filter((item) => {
             return item.id !== action.payload.user_id;

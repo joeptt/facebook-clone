@@ -1,6 +1,6 @@
 import BioEditor from "./bioEditor";
 import ProfileModal from "./profilePictureModal";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import CoverModal from "./coverModal";
 import Navbar from "./navbar";
 
@@ -58,8 +58,11 @@ export default function Profile({
                                 src={cover_picture_url}
                                 id="cover-photo-profile"
                             />
-                            <button onClick={onClickCoverPhoto}>
-                                Change Cover Photo
+                            <button
+                                id="change-cover-button"
+                                onClick={onClickCoverPhoto}
+                            >
+                                Edit Cover Photo
                             </button>
                         </div>
                         <div className="profile-picture-div">
