@@ -647,10 +647,10 @@ input:not(:placeholder-shown) + .placeholder {
 
 .wall-posts {
     margin-left: 30px;
-    margin-top: 20px;
     width: 55%;
-    height: 200px;
-    background-color: white;
+    padding: 20px;
+    height: 100%;
+
     border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
 }
@@ -765,6 +765,21 @@ input:not(:placeholder-shown) + .placeholder {
 .cover-div img {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+
+.friend-button {
+    height: 40px;
+    width: 100px;
+    background-color: #1877f2;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-family: helvetica;
+    cursor: pointer;
+}
+
+.friend-button:hover {
+    background-color: #156ee4;
 }
 
 .profile-picture-div {
@@ -958,4 +973,64 @@ input:not(:placeholder-shown) + .placeholder {
 
 .end-friendship-button:hover {
     background-color: rgb(255, 64, 64);
+}
+
+/* wall-post */
+
+.wall-post-img {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.upper-wall-post {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding-bottom: 10px;
+}
+
+.upper-wall-post p {
+    margin-left: 10px;
+    font-size: 12px;
+    font-family: helvetica;
+}
+
+.single-wall-post {
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+        rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 25px;
+    background-color: white;
+}
+
+.wall-post-input {
+    width: 80%;
+    height: 40px;
+    background-color: #eff2f5;
+    border-radius: 30px;
+    border: none;
+    margin-left: 20px;
+    padding-left: 40px;
+}
+
+.input-profile-pic {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.form-wall-post {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 30px;
+    background-color: white;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
 }

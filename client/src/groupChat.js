@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import Navbar from "./navbar";
 import io from "socket.io-client";
 
 let socket;
@@ -8,6 +8,7 @@ export default function Chat() {
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
+        console.log("MOUNTED");
         if (!socket) {
             socket = io.connect();
         }
@@ -24,12 +25,11 @@ export default function Chat() {
         };
     }, []);
 
-    useEffect(() => {
+    if (socket) {
         socket.on("newMessage", (data) => {
             setMessages([...messages, data]);
-            console.log("messages after sending new one", messages);
         });
-    }, [messages]);
+    }
 
     function onSubmit(event) {
         event.preventDefault();
@@ -39,23 +39,25 @@ export default function Chat() {
     }
 
     return (
-        <section className="chat">
-            <h2>Chat</h2>
-            {console.log("messages in chat: ", messages)}
-            {messages &&
-                messages.map((message) => {
-                    return (
-                        <div key={message.id}>
-                            <p>
-                                {message.first_name} says: {message.text}
-                            </p>
-                        </div>
-                    );
-                })}
-            <form onSubmit={onSubmit}>
-                <input name="text"></input>
-                <button>SEND MESSAGE</button>
-            </form>
-        </section>
+        <>
+            <Navbar />
+            <section className="chat">
+                <h2>Chat</h2>
+                {messages &&
+                    messages.map((message) => {
+                        return (
+                            <div key={message.id}>
+                                <p>
+                                    {message.first_name} says: {message.text}
+                                </p>
+                            </div>
+                        );
+                    })}
+                <form onSubmit={onSubmit}>
+                    <input name="text"></input>
+                    <button>SEND MESSAGE</button>
+                </form>
+            </section>
+        </>
     );
 }

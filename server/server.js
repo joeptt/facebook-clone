@@ -26,6 +26,8 @@ const {
     getAllFriendsAndWannabes,
     getRecentChatMessage,
     storeMessageOnDb,
+    storeWallPostInDb,
+    getAllPostsFromDBbyRecipientID,
 } = require("../database/db");
 const { upload } = require("../s3");
 const { Server } = require("http");
@@ -399,7 +401,7 @@ io.on("connection", async (socket) => {
     // get recent messages and sent to client
     const recentChatMessages = await getRecentChatMessage();
     console.log(recentChatMessages);
-    socket.emit("recentMessages", recentChatMessages);
+    socket.emit("recentMessages", recentChatMessages.reverse());
 
     // store new message in DB and then send new message to chat
     socket.on("sendMessage", async (text) => {
@@ -416,6 +418,33 @@ io.on("connection", async (socket) => {
             ...message,
         });
     });
+});
+
+app.post("/wallpost", async (req, res) => {
+    const user = await getUserById(req.session.user_id);
+    const result = await storeWallPostInDb(
+        req.body.post,
+        req.session.user_id,
+        req.body.otherUserId
+    );
+    console.log("result after db query", result);
+    const newPost = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        profile_picture_url: user.profile_picture_url,
+        ...result,
+    };
+    res.json(newPost);
+});
+
+app.get("/get/wallposts/:user_id", async (req, res) => {
+    const result = await getAllPostsFromDBbyRecipientID(req.params.user_id);
+    res.json(result);
+});
+
+app.get(`/get/wallposts`, async (req, res) => {
+    const result = await getAllPostsFromDBbyRecipientID(req.session.user_id);
+    res.json(result);
 });
 
 app.get("*", function (req, res) {

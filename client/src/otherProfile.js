@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
 import Navbar from "./navbar";
+import Wallposts from "./wall-posts";
 import Friendships from "./friendships";
 
 export default function OtherProfile({
@@ -61,14 +62,23 @@ export default function OtherProfile({
                                 src={user.profile_picture_url}
                                 className="profile-picture-onprofile"
                             ></img>
-                            <h3>
-                                {user.first_name} {user.last_name}
-                            </h3>
+                            <div>
+                                <h3>
+                                    {user.first_name} {user.last_name}
+                                </h3>
+                                <Friendships otherUserId={otherUserId} />
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div className="profile-bottompart">
                     <div className="bio-editior-div">{user.bio}</div>
+                    <div className="wall-posts">
+                        <Wallposts
+                            otherUserId={otherUserId}
+                            profile_picture_url={profile_picture_url}
+                        />
+                    </div>
                 </div>
             </div>
         </>

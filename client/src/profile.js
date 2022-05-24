@@ -1,6 +1,6 @@
 import BioEditor from "./bioEditor";
 import ProfileModal from "./profilePictureModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CoverModal from "./coverModal";
 import Navbar from "./navbar";
 
@@ -19,6 +19,19 @@ export default function Profile({
         profileModalShown: false,
         coverModalShown: false,
     });
+
+    let [posts, setPosts] = useState([]);
+
+    useEffect(() => {
+        console.log("mounted");
+        fetch(`/get/wallposts`)
+            .then((res) => res.json())
+            .then((result) => {
+                console.log(result);
+                setPosts((posts = [...result]));
+                console.log("mount posts -> ", posts);
+            });
+    }, []);
     // show modal
     function onProfileImgClick() {
         setModal({ profileModalShown: true });
@@ -81,7 +94,30 @@ export default function Profile({
                     <div className="bio-editior-div">
                         <BioEditor bio={bio} onUploadBio={onUploadBio} />
                     </div>
-                    <div className="wall-posts"></div>
+                    <div className="wall-posts">
+                        <div className="all-wall-posts">
+                            {posts &&
+                                posts.map((x) => {
+                                    return (
+                                        <div
+                                            className="single-wall-post"
+                                            key={x.id}
+                                        >
+                                            <div className="upper-wall-post">
+                                                <img
+                                                    className="wall-post-img"
+                                                    src={x.profile_picture_url}
+                                                ></img>
+                                                <p className="username">
+                                                    {x.first_name} {x.last_name}
+                                                </p>
+                                            </div>
+                                            <p>{x.post}</p>
+                                        </div>
+                                    );
+                                })}
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

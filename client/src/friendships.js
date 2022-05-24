@@ -70,5 +70,9 @@ export default function Friendships({ otherUserId }) {
         }
     }
 
-    return <button onClick={onClickFriendshipButton}>{buttonLabel}</button>;
+    return (
+        <button className="friend-button" onClick={onClickFriendshipButton}>
+            {buttonLabel}
+        </button>
+    );
 }

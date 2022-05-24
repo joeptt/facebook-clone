@@ -239,7 +239,10 @@ module.exports.getRecentChatMessage = function () {
             SELECT chat_messages.*, users.first_name, users.last_name, users.profile_picture_url
             FROM chat_messages
             JOIN users
-            ON users.id = chat_messages.sender_id`
+            ON users.id = chat_messages.sender_id
+            ORDER BY created_at DESC
+            LIMIT 10
+            `
         )
         .then((result) => result.rows);
 };
@@ -253,4 +256,27 @@ module.exports.storeMessageOnDb = function (sender_id) {
     `;
     const params = [sender_id.sender_id, sender_id.text];
     return db.query(query, params).then((result) => result.rows[0]);
+};
+
+module.exports.storeWallPostInDb = function (post, sender_id, recipient_id) {
+    const query = `
+        INSERT INTO wall_posts (post, sender_id, recipient_id)
+        VALUES ($1, $2, $3)
+        RETURNING *
+    `;
+    const params = [post, sender_id, recipient_id];
+    return db.query(query, params).then((result) => result.rows[0]);
+};
+
+module.exports.getAllPostsFromDBbyRecipientID = function (recepient_id) {
+    const query = ` 
+    SELECT wall_posts.id AS id, users.first_name AS first_name, users.last_name AS last_name, users.profile_picture_url AS profile_picture_url, wall_posts.post AS post
+    FROM wall_posts
+    LEFT JOIN users
+    ON users.id = wall_posts.sender_id
+    WHERE recipient_id = $1  
+
+    `;
+    const params = [recepient_id];
+    return db.query(query, params).then((result) => result.rows);
 };
