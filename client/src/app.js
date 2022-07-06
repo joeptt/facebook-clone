@@ -1,12 +1,13 @@
 import { Component } from "react";
 import Profile from "./profile";
-//wimport ProfilePicture from "./profilePicture";
 import { BrowserRouter, Route } from "react-router-dom";
-//import FindPeople from "./findPeople";
 import OtherProfile from "./otherProfile";
 import Navbar from "./navbar";
 import Friends from "./friends";
-import Chat from "./groupChat";
+import GroupChat from "./groupChat";
+import FriendsOnly from "./friendsOnly";
+import PrivateChat from "./privateChat";
+import { socket } from "./socket";
 
 export default class App extends Component {
     constructor() {
@@ -18,6 +19,9 @@ export default class App extends Component {
             cover_picture_url: "",
             modalShown: false,
             bio: "",
+            friend_id: null,
+            private_messages: [],
+            chatShwon: false,
         };
 
         this.onClickImage = this.onClickImage.bind(this);
@@ -25,6 +29,38 @@ export default class App extends Component {
         this.onUpload = this.onUpload.bind(this);
         this.onUploadBio = this.onUploadBio.bind(this);
         this.onUploadCover = this.onUploadCover.bind(this);
+        this.onClickFriend = this.onClickFriend.bind(this);
+        this.onNewPrivateMessage = this.onNewPrivateMessage.bind(this);
+        this.onClickChatClose = this.onClickChatClose.bind(this);
+    }
+
+    onClickFriend(friend_id) {
+        this.setState({
+            chatShown: true,
+        });
+        console.log("Hallo");
+        socket.emit("getAllPrivateMessages", friend_id);
+
+        socket.on("receivePrivateMessages", (data) => {
+            this.setState({
+                friend_id: friend_id,
+                private_messages: data,
+            });
+        });
+    }
+
+    onClickChatClose() {
+        this.setState({
+            chatShown: false,
+        });
+    }
+
+    onNewPrivateMessage(newMessage) {
+        console.log("newMessage ", newMessage);
+        console.log("this.state.privateMessages", this.state.private_messages);
+        this.setState({
+            private_messages: [...this.state.private_messages, newMessage],
+        });
     }
 
     onClickLogout() {
@@ -88,49 +124,70 @@ export default class App extends Component {
     }
     render() {
         return (
-            <BrowserRouter>
-                <Route exact path="/group-chat">
-                    <Chat />
-                </Route>
-                <Route exact path="/friends">
-                    <Friends
-                        onClickLogout={this.onClickLogout}
-                        {...this.state}
-                    />
-                </Route>
-                <Route exact path="/">
-                    <div className="app">
-                        <Navbar
+            <>
+                <BrowserRouter>
+                    <Route exact path="/">
+                        <div className="app">
+                            <Navbar
+                                onClickLogout={this.onClickLogout}
+                                {...this.state}
+                            />
+
+                            <main className="container">
+                                <div id="sidebar-left-homepage"></div>
+                                <div id="feed-homepage">
+                                    <div className="input-feed-post">INPUT</div>
+                                    <div className="posts-feed">POSTS</div>
+                                </div>
+                                <div id="sidebar-right-homepage">
+                                    <FriendsOnly
+                                        onClickFriend={this.onClickFriend}
+                                    />
+                                </div>
+                            </main>
+
+                            <footer></footer>
+                        </div>
+                    </Route>
+                    <Route exact path="/group-chat">
+                        <GroupChat
                             onClickLogout={this.onClickLogout}
                             {...this.state}
                         />
-
-                        <main className="container">
-                            <div id="sidebar-left-homepage"></div>
-                            <div id="feed-homepage"></div>
-                            <div id="sidebar-right-homepage"></div>
-                        </main>
-
-                        <footer></footer>
-                    </div>
-                </Route>
-                <Route exact path="/profile">
-                    <Profile
-                        {...this.state}
-                        onUploadBio={this.onUploadBio}
-                        closeModal={this.closeModal}
-                        onUpload={this.onUpload}
-                        onUploadCover={this.onUploadCover}
-                        onClickLogout={this.onClickLogout}
-                    />
-                </Route>
-                <Route path="/user/:otherUserId">
-                    <OtherProfile
-                        onClickLogout={this.onClickLogout}
-                        {...this.state}
-                    />
-                </Route>
-            </BrowserRouter>
+                    </Route>
+                    <Route exact path="/friends">
+                        <Friends
+                            onClickLogout={this.onClickLogout}
+                            {...this.state}
+                        />
+                    </Route>
+                    <Route exact path="/profile">
+                        <Profile
+                            {...this.state}
+                            onUploadBio={this.onUploadBio}
+                            closeModal={this.closeModal}
+                            onUpload={this.onUpload}
+                            onUploadCover={this.onUploadCover}
+                            onClickLogout={this.onClickLogout}
+                        />
+                    </Route>
+                    <Route path="/user/:otherUserId">
+                        <OtherProfile
+                            onClickLogout={this.onClickLogout}
+                            {...this.state}
+                        />
+                    </Route>
+                    {this.state.chatShown && (
+                        <PrivateChat
+                            friend_id={this.state.friend_id}
+                            private_messages={this.state.private_messages}
+                            onClickFriend={this.onClickFriend}
+                            onNewPrivateMessage={this.onNewPrivateMessage}
+                            onClickChatClose={this.onClickChatClose}
+                        />
+                    )}
+                </BrowserRouter>
+            </>
         );
     }
 }

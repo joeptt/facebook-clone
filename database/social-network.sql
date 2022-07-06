@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS wall_posts;
 DROP TABLE IF EXISTS chat_messages;
+DROP TABLE IF EXISTS private_chat_messages;
 DROP TABLE IF EXISTS friendships;
 DROP TABLE IF EXISTS password_reset_codes;
 DROP TABLE IF EXISTS users;
@@ -33,6 +34,14 @@ CREATE TABLE friendships (
 CREATE TABLE chat_messages (
     id              SERIAL PRIMARY KEY,
     sender_id       INT REFERENCES users(id) NOT NULL,
+    text            TEXT,
+    created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE private_chat_messages (
+    id              SERIAL PRIMARY KEY,
+    sender_id       INT REFERENCES users(id) NOT NULL,
+    recipient_id    INT REFERENCES users(id) NOT NULL,
     text            TEXT,
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

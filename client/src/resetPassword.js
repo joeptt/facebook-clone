@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 
-export default class Login extends Component {
+export default class ResetPassword extends Component {
     constructor() {
         super();
         this.state = {
@@ -104,7 +104,7 @@ export default class Login extends Component {
                 <>
                     <h1>SUCCESSSSS</h1>
                     <h3>Password succesfully reset</h3>
-                    <Link to="/login">Go to login</Link>
+                    <Link to="/">Go to login</Link>
                 </>
             );
         }

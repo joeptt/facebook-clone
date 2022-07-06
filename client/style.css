@@ -620,7 +620,8 @@ input:not(:placeholder-shown) + .placeholder {
 
 .container {
     display: flex;
-    height: 100vh;
+    height: 100%;
+    background-color: #f0f2f5;
 }
 
 #sidebar-left-homepage {
@@ -1033,4 +1034,120 @@ input:not(:placeholder-shown) + .placeholder {
     width: 100%;
     padding: 10px;
     border-radius: 5px;
+}
+
+/*  FEED PAGE  */
+
+.home-friends {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin-top: 20px;
+    padding: 5px;
+    width: 80%;
+    border-radius: 5px;
+}
+
+.home-friends:hover {
+    background-color: white;
+}
+
+.home-friends img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.home-friends p {
+    margin-left: 15px;
+    font-family: helvetica;
+    font-size: 14px;
+}
+
+.breakline-home-friends {
+    margin-top: 20px;
+    width: 80%;
+    border-bottom: 0.5px solid rgba(0, 0, 0, 0.3);
+}
+
+.input-feed-post {
+    margin-top: 20px;
+    height: 150px;
+    width: 90%;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.posts-feed {
+    margin-top: 20px;
+    width: 90%;
+    height: 100vh;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+/* private chat */
+.private-chat-window {
+    height: 455px;
+    width: 388px;
+    position: fixed;
+    bottom: 0;
+    right: 200px;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.private-chat-messages {
+    height: 80%;
+    overflow: scroll;
+    padding-left: 20px;
+}
+
+.private-chat-input {
+    height: 10%;
+}
+
+.private-chat-input form {
+    height: 100%;
+    width: 100%;
+}
+.private-chat-input input {
+    height: 100%;
+    width: 100%;
+    border: none;
+    border-top: 0.5px solid rgba(0, 0, 0, 0.3);
+}
+
+.private-chat-close {
+    cursor: pointer;
+}
+
+.private-chat-x-div {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 10%;
+    width: 90%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+/*  GROUP CHAT  */
+.chat {
+    margin-left: 200px;
+    width: 50%;
+    height: 700px;
+    position: relative;
+}
+
+.group-chat-form {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
 }

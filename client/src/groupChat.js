@@ -1,28 +1,19 @@
 import { useState, useEffect } from "react";
 import Navbar from "./navbar";
-import io from "socket.io-client";
+import { socket } from "./socket";
 
-let socket;
-
-export default function Chat() {
+export default function GroupChat({
+    onClickLogout,
+    first_name,
+    profile_picture_url,
+}) {
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         console.log("MOUNTED");
-        if (!socket) {
-            socket = io.connect();
-        }
-
         socket.on("recentMessages", (data) => {
             setMessages([...data]);
         });
-
-        return () => {
-            socket.off("recentMessages");
-            socket.off("newMessage");
-            socket.disconnect();
-            socket = null;
-        };
     }, []);
 
     if (socket) {
@@ -40,9 +31,12 @@ export default function Chat() {
 
     return (
         <>
-            <Navbar />
+            <Navbar
+                onClickLogout={onClickLogout}
+                first_name={first_name}
+                profile_picture_url={profile_picture_url}
+            />
             <section className="chat">
-                <h2>Chat</h2>
                 {messages &&
                     messages.map((message) => {
                         return (
@@ -53,7 +47,7 @@ export default function Chat() {
                             </div>
                         );
                     })}
-                <form onSubmit={onSubmit}>
+                <form className="group-chat-form" onSubmit={onSubmit}>
                     <input name="text"></input>
                     <button>SEND MESSAGE</button>
                 </form>

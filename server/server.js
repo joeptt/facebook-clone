@@ -28,6 +28,9 @@ const {
     storeMessageOnDb,
     storeWallPostInDb,
     getAllPostsFromDBbyRecipientID,
+    getAllFriends,
+    storePrivateMessage,
+    getAllPrivateMessages,
 } = require("../database/db");
 const { upload } = require("../s3");
 const { Server } = require("http");
@@ -395,12 +398,47 @@ io.use((socket, next) =>
     cookieSessionMiddleware(socket.request, socket.request.res, next)
 );
 
+let connectedUsers = {};
+
 io.on("connection", async (socket) => {
     const { user_id } = socket.request.session;
+    connectedUsers[user_id] = [...(connectedUsers[user_id] || []), socket.id];
     console.log("Incoming socket connection", socket.id);
+    // get recent prvt messages and emit them
+    socket.on("getAllPrivateMessages", async (friend_id) => {
+        const result = await getAllPrivateMessages(user_id, friend_id);
+        console.log("result from getting prvt message", result);
+        socket.emit("receivePrivateMessages", result);
+    });
+    // store new private message on DB and then send new Message to private chat
+    socket.on("sendPrivateMessage", async ({ message, friend_id }) => {
+        console.log(message, friend_id);
+        const sender = await getUserById(user_id);
+        const result = await storePrivateMessage(user_id, friend_id, message);
+        console.log("Result from stroing prvt message", result);
+        console.log(connectedUsers);
+        //
+        for (let i = 0; i < connectedUsers[friend_id].length; i++) {
+            const currentSocketId = connectedUsers[friend_id][i];
+            const friendSocket = io.sockets.sockets.get(currentSocketId);
+            friendSocket.emit("newPrivateMessage", {
+                first_name: sender.first_name,
+                last_name: sender.last_name,
+                profile_picture_url: sender.profile_picture_url,
+                ...result,
+            });
+        }
+        socket.emit("newPrivateMessage", {
+            first_name: sender.first_name,
+            last_name: sender.last_name,
+            profile_picture_url: sender.profile_picture_url,
+            ...result,
+        });
+    });
+
     // get recent messages and sent to client
     const recentChatMessages = await getRecentChatMessage();
-    console.log(recentChatMessages);
+
     socket.emit("recentMessages", recentChatMessages.reverse());
 
     // store new message in DB and then send new message to chat
@@ -417,6 +455,10 @@ io.on("connection", async (socket) => {
             profile_picture_url: sender.profile_picture_url,
             ...message,
         });
+    });
+
+    socket.on("disconnect", () => {
+        connectedUsers[user_id] = [];
     });
 });
 
@@ -444,6 +486,26 @@ app.get("/get/wallposts/:user_id", async (req, res) => {
 
 app.get(`/get/wallposts`, async (req, res) => {
     const result = await getAllPostsFromDBbyRecipientID(req.session.user_id);
+    res.json(result);
+});
+
+app.get("/get/friends", async (req, res) => {
+    const result = await getAllFriends(req.session.user_id);
+    res.json(result);
+});
+
+app.post("/private-message", async (req, res) => {
+    const { friend_id, message } = req.body;
+    const user_id = req.session.user_id;
+    const result = await storePrivateMessage(user_id, friend_id, message);
+    res.json(result);
+});
+
+app.get("/get/private-messages/:user_id", async (req, res) => {
+    const friend_id = req.params.user_id;
+    const user_id = req.session.user_id;
+    console.log(friend_id, user_id);
+    const result = await getAllPrivateMessages(user_id, friend_id);
     res.json(result);
 });
 

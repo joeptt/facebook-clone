@@ -6,6 +6,7 @@ import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import * as immutableState from "redux-immutable-state-invariant";
 import reducer from "./redux/reducer";
+import { init } from "./socket";
 
 const store = createStore(
     reducer,
@@ -20,6 +21,7 @@ async function displayCorrectPage() {
         if (!data.user_id) {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
+            init(store);
             console.log("APP RENDER");
             ReactDOM.render(
                 <Provider store={store}>

@@ -25,7 +25,6 @@ export default function RecentLogins({ showRegister }) {
         }
     }
     // Write a fetch on click of recent login img to set the req.session.user_id to req.session.recent_id
-    ///---------
     async function onClickRecentImage() {
         const res = await fetch("/set-recent-login");
         const result = await res.json();

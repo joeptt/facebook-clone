@@ -61,7 +61,7 @@ export default function FindPeople() {
                                     }
                                 />
                                 <h3>
-                                    {user.first_name}
+                                    {user.first_name}&nbsp;
                                     {user.last_name}
                                 </h3>
                             </div>

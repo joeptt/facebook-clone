@@ -10,7 +10,6 @@ import Navbar from "./navbar";
 export default function Friends({
     onClickLogout,
     first_name,
-    last_name,
     profile_picture_url,
 }) {
     const dispatch = useDispatch();

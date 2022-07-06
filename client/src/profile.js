@@ -68,7 +68,11 @@ export default function Profile({
                         )}
                         <div className="cover-div">
                             <img
-                                src={cover_picture_url}
+                                src={
+                                    cover_picture_url
+                                        ? cover_picture_url
+                                        : "https://i.ibb.co/bbfm9G8/default-cover.jpg"
+                                }
                                 id="cover-photo-profile"
                             />
                             <button
@@ -80,7 +84,11 @@ export default function Profile({
                         </div>
                         <div className="profile-picture-div">
                             <img
-                                src={profile_picture_url}
+                                src={
+                                    profile_picture_url
+                                        ? profile_picture_url
+                                        : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                }
                                 onClick={onProfileImgClick}
                                 className="profile-picture-onprofile"
                             ></img>

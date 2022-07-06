@@ -275,8 +275,38 @@ module.exports.getAllPostsFromDBbyRecipientID = function (recepient_id) {
     LEFT JOIN users
     ON users.id = wall_posts.sender_id
     WHERE recipient_id = $1  
-
     `;
     const params = [recepient_id];
+    return db.query(query, params).then((result) => result.rows);
+};
+
+module.exports.getAllFriends = function (user_id) {
+    const query = `
+        SELECT users.id, first_name, last_name, profile_picture_url, accepted
+        FROM friendships
+        JOIN users
+        ON (accepted = true AND recipient_id = $1 AND sender_id = users.id)
+        OR (accepted = true AND sender_id = $1 AND recipient_id = users.id)
+    `;
+    const params = [user_id];
+    return db.query(query, params).then((result) => result.rows);
+};
+
+module.exports.storePrivateMessage = function (sender_id, recepient_id, text) {
+    const query = `
+        INSERT INTO private_chat_messages (sender_id, recipient_id, text)
+        VALUES ($1, $2, $3)
+        RETURNING * 
+    `;
+    const params = [sender_id, recepient_id, text];
+    return db.query(query, params).then((result) => result.rows[0]);
+};
+
+module.exports.getAllPrivateMessages = function (sender_id, recipient_id) {
+    const query = `
+        SELECT * FROM private_chat_messages
+        WHERE (sender_id = $1 AND recipient_id = $2) OR (sender_id = $2 AND recipient_id = $1) 
+    `;
+    const params = [sender_id, recipient_id];
     return db.query(query, params).then((result) => result.rows);
 };
