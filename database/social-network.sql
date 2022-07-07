@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS wall_posts;
 DROP TABLE IF EXISTS chat_messages;
 DROP TABLE IF EXISTS private_chat_messages;
@@ -52,4 +53,11 @@ CREATE TABLE wall_posts (
     recipient_id INT REFERENCES users(id) NOT NULL,
     post TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
+
+CREATE TABLE posts (
+    id SERIAL PRIMARY KEY,
+    sender_id INT REFERENCES users(id) NOT NULL,
+    post TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

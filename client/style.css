@@ -813,6 +813,8 @@ input:not(:placeholder-shown) + .placeholder {
 .friend-requests-div {
     display: flex;
     flex-direction: row;
+    overflow: scroll;
+    max-height: 100%;
 }
 
 .friends-container {
@@ -1090,6 +1092,38 @@ input:not(:placeholder-shown) + .placeholder {
     align-items: center;
     justify-content: center;
     border-radius: 10px;
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.input-wrapper form {
+    height: 30%;
+    width: 70%;
+}
+
+.input-wrapper input {
+    height: 100%;
+    width: 100%;
+    margin-left: 15px;
+    border-radius: 30px;
+    border: none;
+    background-color: #eff2f5;
+    padding: 20px;
+    font-size: 17px;
+    font-family: helvetica;
+}
+
+.input-wrapper img {
+    height: 45px;
+    width: 45px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 /* private chat */

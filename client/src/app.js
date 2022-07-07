@@ -2,11 +2,10 @@ import { Component } from "react";
 import Profile from "./profile";
 import { BrowserRouter, Route } from "react-router-dom";
 import OtherProfile from "./otherProfile";
-import Navbar from "./navbar";
 import Friends from "./friends";
 import GroupChat from "./groupChat";
-import FriendsOnly from "./friendsOnly";
 import PrivateChat from "./privateChat";
+import Feed from "./feed";
 import { socket } from "./socket";
 
 export default class App extends Component {
@@ -127,27 +126,11 @@ export default class App extends Component {
             <>
                 <BrowserRouter>
                     <Route exact path="/">
-                        <div className="app">
-                            <Navbar
-                                onClickLogout={this.onClickLogout}
-                                {...this.state}
-                            />
-
-                            <main className="container">
-                                <div id="sidebar-left-homepage"></div>
-                                <div id="feed-homepage">
-                                    <div className="input-feed-post">INPUT</div>
-                                    <div className="posts-feed">POSTS</div>
-                                </div>
-                                <div id="sidebar-right-homepage">
-                                    <FriendsOnly
-                                        onClickFriend={this.onClickFriend}
-                                    />
-                                </div>
-                            </main>
-
-                            <footer></footer>
-                        </div>
+                        <Feed
+                            onClickLogout={this.onClickLogout}
+                            user={this.state}
+                            onClickFriend={this.onClickFriend}
+                        />
                     </Route>
                     <Route exact path="/group-chat">
                         <GroupChat
