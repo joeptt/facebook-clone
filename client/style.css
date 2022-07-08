@@ -5,6 +5,8 @@
 
 body {
     margin: 0;
+    height: 100vh;
+    background-color: #f0f2f5;
 }
 
 #profilePictureHeader {
@@ -1074,7 +1076,7 @@ input:not(:placeholder-shown) + .placeholder {
 
 .input-feed-post {
     margin-top: 20px;
-    height: 150px;
+    height: 130px;
     width: 90%;
     background-color: white;
     display: flex;
@@ -1086,12 +1088,59 @@ input:not(:placeholder-shown) + .placeholder {
 .posts-feed {
     margin-top: 20px;
     width: 90%;
-    height: 100vh;
-    background-color: white;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    flex-direction: column;
     border-radius: 10px;
+}
+
+.posts-wrapper {
+    min-height: 100px;
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+}
+
+.profile-picture-wrapper-posts {
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+}
+
+.profile-username-wrapper {
+    display: flex;
+}
+
+.posts-wrapper img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50px;
+    object-fit: cover;
+}
+
+.username-createdAt-wrapper {
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+.username-createdAt-wrapper p {
+    margin: 0px;
+}
+
+.name-posts {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.created_at-posts {
+    color: #b5b6b8;
+    font-size: 10px;
 }
 
 .input-wrapper {
@@ -1103,7 +1152,7 @@ input:not(:placeholder-shown) + .placeholder {
 }
 
 .input-wrapper form {
-    height: 30%;
+    height: 40%;
     width: 70%;
 }
 
@@ -1120,8 +1169,8 @@ input:not(:placeholder-shown) + .placeholder {
 }
 
 .input-wrapper img {
-    height: 45px;
-    width: 45px;
+    height: 55px;
+    width: 55px;
     border-radius: 50%;
     object-fit: cover;
 }

@@ -6,6 +6,7 @@ const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
 const {
     storeUserOnDB,
+    storePost,
     logInCheck,
     getProfileInfoOfLoggedInUser,
     addImageToDatabase,
@@ -13,6 +14,7 @@ const {
     storePasswordCode,
     compareCodes,
     storeBioOnDb,
+    getAllPostsWithUserInfo,
     updatingPassword,
     searchUsersInput,
     getUserById,
@@ -403,20 +405,15 @@ let connectedUsers = {};
 io.on("connection", async (socket) => {
     const { user_id } = socket.request.session;
     connectedUsers[user_id] = [...(connectedUsers[user_id] || []), socket.id];
-    console.log("Incoming socket connection", socket.id);
     // get recent prvt messages and emit them
     socket.on("getAllPrivateMessages", async (friend_id) => {
         const result = await getAllPrivateMessages(user_id, friend_id);
-        console.log("result from getting prvt message", result);
         socket.emit("receivePrivateMessages", result);
     });
     // store new private message on DB and then send new Message to private chat
     socket.on("sendPrivateMessage", async ({ message, friend_id }) => {
-        console.log(message, friend_id);
         const sender = await getUserById(user_id);
         const result = await storePrivateMessage(user_id, friend_id, message);
-        console.log("Result from stroing prvt message", result);
-        console.log(connectedUsers);
         //
         for (let i = 0; i < connectedUsers[friend_id].length; i++) {
             const currentSocketId = connectedUsers[friend_id][i];
@@ -448,7 +445,6 @@ io.on("connection", async (socket) => {
             sender_id: user_id,
             text: text,
         });
-        console.log(message);
         io.emit("newMessage", {
             first_name: sender.first_name,
             last_name: sender.last_name,
@@ -504,8 +500,22 @@ app.post("/private-message", async (req, res) => {
 app.get("/get/private-messages/:user_id", async (req, res) => {
     const friend_id = req.params.user_id;
     const user_id = req.session.user_id;
-    console.log(friend_id, user_id);
     const result = await getAllPrivateMessages(user_id, friend_id);
+    res.json(result);
+});
+
+app.post("/new-post", async (req, res) => {
+    const { post } = req.body;
+    const user_id = req.session.user_id;
+    const result = await storePost(user_id, post);
+    res.json(result);
+});
+
+app.get("/get/posts", async (req, res) => {
+    console.log("tets");
+    const user_id = req.session.user_id;
+    const result = await getAllPostsWithUserInfo(user_id);
+    console.log("result -> ", result);
     res.json(result);
 });
 

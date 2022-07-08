@@ -91,7 +91,13 @@ export default function Friends({
                                         className="users-friendship"
                                         key={item.id}
                                     >
-                                        <img src={item.profile_picture_url} />
+                                        <img
+                                            src={
+                                                item.profile_picture_url
+                                                    ? item.profile_picture_url
+                                                    : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                            }
+                                        />
                                         <p>
                                             {item.first_name}&nbsp;
                                             {item.last_name}
@@ -118,7 +124,13 @@ export default function Friends({
                         friends.map((item) => {
                             return (
                                 <div className="users-friendship" key={item.id}>
-                                    <img src={item.profile_picture_url} />
+                                    <img
+                                        src={
+                                            item.profile_picture_url
+                                                ? item.profile_picture_url
+                                                : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                        }
+                                    />
                                     <p>
                                         {item.first_name}&nbsp;
                                         {item.last_name}

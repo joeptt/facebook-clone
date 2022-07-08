@@ -59,7 +59,11 @@ export default function OtherProfile({
                         </div>
                         <div className="profile-picture-div">
                             <img
-                                src={user.profile_picture_url}
+                                src={
+                                    user.profile_picture_url
+                                        ? user.profile_picture_url
+                                        : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                }
                                 className="profile-picture-onprofile"
                             ></img>
                             <div>

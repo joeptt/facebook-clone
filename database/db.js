@@ -270,11 +270,11 @@ module.exports.storeWallPostInDb = function (post, sender_id, recipient_id) {
 
 module.exports.getAllPostsFromDBbyRecipientID = function (recepient_id) {
     const query = ` 
-    SELECT wall_posts.id AS id, users.first_name AS first_name, users.last_name AS last_name, users.profile_picture_url AS profile_picture_url, wall_posts.post AS post
-    FROM wall_posts
-    LEFT JOIN users
-    ON users.id = wall_posts.sender_id
-    WHERE recipient_id = $1  
+        SELECT wall_posts.id AS id, users.first_name AS first_name, users.last_name AS last_name, users.profile_picture_url AS profile_picture_url, wall_posts.post AS post
+        FROM wall_posts
+        LEFT JOIN users
+        ON users.id = wall_posts.sender_id
+        WHERE recipient_id = $1  
     `;
     const params = [recepient_id];
     return db.query(query, params).then((result) => result.rows);
@@ -308,5 +308,32 @@ module.exports.getAllPrivateMessages = function (sender_id, recipient_id) {
         WHERE (sender_id = $1 AND recipient_id = $2) OR (sender_id = $2 AND recipient_id = $1) 
     `;
     const params = [sender_id, recipient_id];
+    return db.query(query, params).then((result) => result.rows);
+};
+
+module.exports.storePost = function (sender_id, post) {
+    const query = `
+        INSERT INTO posts (sender_id, post)
+        VALUES ($1, $2)
+        RETURNING  *
+    `;
+    const params = [sender_id, post];
+    return db.query(query, params).then((result) => result.rows);
+};
+
+module.exports.getAllPostsWithUserInfo = function (user_id) {
+    console.log(user_id);
+    const query = `
+        SELECT users.first_name AS first_name, users.last_name AS last_name, users.profile_picture_url AS profile_picture_url, 
+        posts.id AS id, posts.sender_id AS sender_id, posts.post AS post, posts.created_at AS created_at , friendships.accepted
+        FROM users
+        JOIN posts ON (posts.sender_id = users.id)
+        LEFT JOIN friendships ON (friendships.sender_id = users.id) OR (friendships.recipient_id = users.id)
+        WHERE (friendships.sender_id = $1 AND friendships.accepted = true) 
+        OR posts.sender_id = $1 
+        OR (friendships.recipient_id = $1 AND friendships.accepted = true)
+
+    `;
+    const params = [user_id];
     return db.query(query, params).then((result) => result.rows);
 };

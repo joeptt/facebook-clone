@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 export default function Wallposts({ otherUserId, profile_picture_url }) {
     let [posts, setPosts] = useState([]);
     const [newPosts, setNewPosts] = useState([]);
+
     useEffect(() => {
         console.log("mounted");
         fetch(`/get/wallposts/${otherUserId}`)
@@ -10,7 +11,6 @@ export default function Wallposts({ otherUserId, profile_picture_url }) {
             .then((result) => {
                 console.log(result);
                 setPosts((posts = [...result]));
-                console.log("mount posts -> ", posts);
             });
     }, [newPosts]);
 
@@ -25,7 +25,6 @@ export default function Wallposts({ otherUserId, profile_picture_url }) {
             },
         });
         const result = await res.json();
-        console.log(result);
         setNewPosts([result]);
         e.target.wallpost.value = "";
     }
