@@ -14,9 +14,9 @@ const {
     storePasswordCode,
     compareCodes,
     storeBioOnDb,
-    getAllPostsWithUserInfo,
     updatingPassword,
     searchUsersInput,
+    getPostFromFriends,
     getUserById,
     recentlyAddedUsers,
     getFriendshipStatus,
@@ -512,11 +512,13 @@ app.post("/new-post", async (req, res) => {
 });
 
 app.get("/get/posts", async (req, res) => {
-    console.log("tets");
     const user_id = req.session.user_id;
-    const result = await getAllPostsWithUserInfo(user_id);
-    console.log("result -> ", result);
-    res.json(result);
+    const result = await getAllFriends(user_id);
+    const friendsIDs = result.map((x) => {
+        return x.id;
+    });
+    const resultPosts = await getPostFromFriends(friendsIDs, user_id);
+    res.json(resultPosts);
 });
 
 app.get("*", function (req, res) {

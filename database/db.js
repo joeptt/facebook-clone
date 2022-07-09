@@ -321,19 +321,14 @@ module.exports.storePost = function (sender_id, post) {
     return db.query(query, params).then((result) => result.rows);
 };
 
-module.exports.getAllPostsWithUserInfo = function (user_id) {
-    console.log(user_id);
+module.exports.getPostFromFriends = function (friendsIDs, user_id) {
     const query = `
         SELECT users.first_name AS first_name, users.last_name AS last_name, users.profile_picture_url AS profile_picture_url, 
-        posts.id AS id, posts.sender_id AS sender_id, posts.post AS post, posts.created_at AS created_at , friendships.accepted
+        posts.id AS id, posts.sender_id AS sender_id, posts.post AS post, posts.created_at AS created_at 
         FROM users
         JOIN posts ON (posts.sender_id = users.id)
-        LEFT JOIN friendships ON (friendships.sender_id = users.id) OR (friendships.recipient_id = users.id)
-        WHERE (friendships.sender_id = $1 AND friendships.accepted = true) 
-        OR posts.sender_id = $1 
-        OR (friendships.recipient_id = $1 AND friendships.accepted = true)
-
+        WHERE sender_id = ANY($1) OR sender_id = $2
     `;
-    const params = [user_id];
+    const params = [friendsIDs, user_id];
     return db.query(query, params).then((result) => result.rows);
 };
