@@ -59,5 +59,6 @@ CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
     sender_id INT REFERENCES users(id) NOT NULL,
     post TEXT,
+    post_picture_url TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

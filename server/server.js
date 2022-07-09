@@ -44,12 +44,10 @@ const uidSafe = require("uid-safe");
 const multer = require("multer");
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        console.log("destitnation");
         callback(null, path.join(__dirname, "uploads"));
     },
     filename: (req, file, callback) => {
         uidSafe(24).then((randomId) => {
-            console.log("filename");
             callback(null, `${randomId}${path.extname(file.originalname)}`);
         });
     },
@@ -360,7 +358,7 @@ app.post(
     uploader.single("cover"),
     upload,
     async (req, res) => {
-        console.log("CONNECTION WORKS", req.body);
+        console.log("coverPhoto body->", req.body);
         const imgUrl = req.body.imgUrl;
         const user_id = req.session.user_id;
         const result = await addCoverPhoto(imgUrl, user_id);
@@ -505,11 +503,25 @@ app.get("/get/private-messages/:user_id", async (req, res) => {
 });
 
 app.post("/new-post", async (req, res) => {
+    console.log("newPost", req.body);
     const { post } = req.body;
     const user_id = req.session.user_id;
     const result = await storePost(user_id, post);
     res.json(result);
 });
+
+app.post(
+    "/new-post-image",
+    uploader.single("postImg"),
+    upload,
+    async (req, res) => {
+        console.log("newPostImage", req.body);
+        const { post, imgUrl } = req.body;
+        const user_id = req.session.user_id;
+        const result = await storePost(user_id, post, imgUrl);
+        res.json(result);
+    }
+);
 
 app.get("/get/posts", async (req, res) => {
     const user_id = req.session.user_id;

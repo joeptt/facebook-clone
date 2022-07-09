@@ -1,7 +1,7 @@
 export default function ProfileModal({ onCloseClick, onUploadCover }) {
     async function onSubmit(event) {
+        event.preventDefault();
         try {
-            event.preventDefault();
             console.log("coverPhoto ->", event.target.image.files[0]);
 
             const formData = new FormData();

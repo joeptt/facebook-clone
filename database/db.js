@@ -311,20 +311,32 @@ module.exports.getAllPrivateMessages = function (sender_id, recipient_id) {
     return db.query(query, params).then((result) => result.rows);
 };
 
-module.exports.storePost = function (sender_id, post) {
-    const query = `
-        INSERT INTO posts (sender_id, post)
-        VALUES ($1, $2)
+module.exports.storePost = function (sender_id, post, imgUrl) {
+    let query;
+    let params;
+    if (imgUrl) {
+        console.log("IMAGE IN DB QUERY");
+        query = `
+        INSERT INTO posts (sender_id, post, post_picture_url)
+        VALUES ($1, $2, $3)
         RETURNING  *
     `;
-    const params = [sender_id, post];
+        params = [sender_id, post, imgUrl];
+    } else {
+        query = `
+            INSERT INTO posts (sender_id, post)
+            VALUES ($1, $2)
+            RETURNING  *
+        `;
+        params = [sender_id, post];
+    }
     return db.query(query, params).then((result) => result.rows);
 };
 
 module.exports.getPostFromFriends = function (friendsIDs, user_id) {
     const query = `
         SELECT users.first_name AS first_name, users.last_name AS last_name, users.profile_picture_url AS profile_picture_url, 
-        posts.id AS id, posts.sender_id AS sender_id, posts.post AS post, posts.created_at AS created_at 
+        posts.id AS id, posts.sender_id AS sender_id, posts.post AS post, posts.created_at AS created_at, posts.post_picture_url AS post_picture_url
         FROM users
         JOIN posts ON (posts.sender_id = users.id)
         WHERE sender_id = ANY($1) OR sender_id = $2
