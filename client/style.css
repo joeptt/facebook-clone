@@ -754,6 +754,7 @@ input:not(:placeholder-shown) + .placeholder {
     font-family: helvetica;
     font-weight: bolder;
     cursor: pointer;
+    z-index: 1000;
 }
 
 #change-cover-button:hover {
@@ -1100,7 +1101,7 @@ input:not(:placeholder-shown) + .placeholder {
     width: 100%;
     background-color: white;
     border-radius: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     display: flex;
     padding: 10px;
     flex-direction: column;
@@ -1222,6 +1223,21 @@ input:not(:placeholder-shown) + .placeholder {
 
 #input-post-image {
     display: none;
+}
+
+.image-post-wrapper button {
+    border: none;
+    background-color: #41b45e;
+    height: 30px;
+    width: 70px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    transition: 0.5s all;
+}
+
+.image-post-wrapper button:hover {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 /* private chat */

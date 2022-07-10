@@ -1,12 +1,12 @@
 import FriendsOnly from "./friendsOnly";
 import Navbar from "./navbar";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 export default function Feed({ onClickLogout, onClickFriend, user }) {
     const inputPlaceholder = `What's on your mind, ${user.first_name}?`;
     const [newPost, setNewPost] = useState({});
     let [posts, setPosts] = useState([]);
-    const refUploaded = useRef();
+    const [imgUploaded, setImgUploaded] = useState("hidden");
 
     useEffect(() => {
         fetch("/get/posts")
@@ -17,13 +17,16 @@ export default function Feed({ onClickLogout, onClickFriend, user }) {
             });
     }, [newPost]);
 
+    const onChangeImg = () => {
+        setImgUploaded("visible");
+    };
+
     const onSubmitNewPost = async (e) => {
         e.preventDefault();
         console.log(e.target.image.files[0], e.target.firstChild.value);
 
         try {
             const formData = new FormData();
-
             // If no image provided store the post only
             if (!e.target.image.files[0]) {
                 const post = e.target.firstChild.value;
@@ -40,6 +43,7 @@ export default function Feed({ onClickLogout, onClickFriend, user }) {
                 }
             } else {
                 // If image provided upload Image aswell as post
+
                 console.log("image provided");
                 formData.append("post", e.target.firstChild.value);
                 formData.append("postImg", e.target.image.files[0]);
@@ -50,6 +54,7 @@ export default function Feed({ onClickLogout, onClickFriend, user }) {
                 const result = await res.json();
                 if (result) {
                     setNewPost(result);
+                    setImgUploaded("hidden");
                 }
             }
         } catch (error) {
@@ -105,12 +110,24 @@ export default function Feed({ onClickLogout, onClickFriend, user }) {
                                         </svg>
                                     </label>
                                     <p>Photo</p>
+                                    <p
+                                        style={{
+                                            visibility: imgUploaded,
+                                            "margin-left": "30px",
+                                            "margin-right": "30px",
+                                            "font-size": "10px",
+                                        }}
+                                    >
+                                        Image selected
+                                    </p>
                                     <input
+                                        onChange={onChangeImg}
                                         id="input-post-image"
                                         type="file"
                                         name="image"
                                         accept="image/*"
                                     />
+                                    <button>Post</button>
                                 </div>
                             </form>
                         </div>
