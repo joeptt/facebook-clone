@@ -405,9 +405,7 @@ io.on("connection", async (socket) => {
     connectedUsers[user_id] = [...(connectedUsers[user_id] || []), socket.id];
     // get recent prvt messages and emit them
     socket.on("getAllPrivateMessages", async (friend_id) => {
-        console.log("friend_id");
         const result = await getAllPrivateMessages(user_id, friend_id);
-        console.log(result);
         socket.emit("receivePrivateMessages", result);
     });
     // store new private message on DB and then send new Message to private chat
