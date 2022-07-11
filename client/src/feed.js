@@ -83,6 +83,7 @@ export default function Feed({ onClickLogout, onClickFriend, user }) {
                                 <input
                                     className="post-text-input"
                                     placeholder={inputPlaceholder}
+                                    required
                                 ></input>
                                 <div className="break-line-post-input"></div>
                                 <div className="image-post-wrapper">
