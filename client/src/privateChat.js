@@ -8,7 +8,7 @@ export default function PrivateChat({ friend_id, onClickChatClose }) {
         socket.emit("getAllPrivateMessages", friend_id);
         socket.on("receivePrivateMessages", (messages) => {
             console.log("messages", messages);
-            setPrivateMessage(messages);
+            setPrivateMessage(messages.reverse());
         });
         return () => {
             socket.off("receivePrivateMessages");
@@ -39,9 +39,23 @@ export default function PrivateChat({ friend_id, onClickChatClose }) {
                 {privateMessages &&
                     privateMessages.map((x) => {
                         return (
-                            <div key={x.id}>
-                                <img src={x.profile_picture_url}></img>
-                                <p>{x.text}</p>
+                            <div className="private-message" key={x.id}>
+                                <img
+                                    src={
+                                        x.profile_picture_url
+                                            ? x.profile_picture_url
+                                            : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                    }
+                                ></img>
+                                <p
+                                    className={
+                                        x.sender_id === friend_id
+                                            ? "private-message-friend"
+                                            : "private-message-user"
+                                    }
+                                >
+                                    {x.text}
+                                </p>
                             </div>
                         );
                     })}
