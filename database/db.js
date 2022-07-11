@@ -304,8 +304,12 @@ module.exports.storePrivateMessage = function (sender_id, recepient_id, text) {
 
 module.exports.getAllPrivateMessages = function (sender_id, recipient_id) {
     const query = `
-        SELECT * FROM private_chat_messages
-        WHERE (sender_id = $1 AND recipient_id = $2) OR (sender_id = $2 AND recipient_id = $1) 
+        SELECT private_chat_messages.*, users.first_name, users.last_name, users.profile_picture_url
+        FROM private_chat_messages
+        JOIN users
+        ON users.id = private_chat_messages.sender_id
+        WHERE (private_chat_messages.sender_id = $1 AND private_chat_messages.recipient_id = $2) OR (private_chat_messages.sender_id = $2 AND private_chat_messages.recipient_id = $1)
+        ORDER BY created_at DESC
     `;
     const params = [sender_id, recipient_id];
     return db.query(query, params).then((result) => result.rows);

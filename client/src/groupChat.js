@@ -11,6 +11,7 @@ export default function GroupChat({
 
     useEffect(() => {
         console.log("MOUNTED");
+        socket.emit("getRecentMessages");
         socket.on("recentMessages", (data) => {
             setMessages([...data]);
         });
@@ -46,8 +47,8 @@ export default function GroupChat({
                                     key={message.id}
                                 >
                                     <p>
-                                        {message.first_name} says:{" "}
-                                        {message.text}
+                                        <strong>{message.first_name}</strong>{" "}
+                                        says: {message.text}
                                     </p>
                                 </div>
                             );

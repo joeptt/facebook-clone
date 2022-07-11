@@ -32,10 +32,13 @@ export default function FriendsOnly({ onClickFriend }) {
                                         : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                                 }
                             />
-                            <p>
-                                {item.first_name}&nbsp;
-                                {item.last_name}
-                            </p>
+
+                            <div className="friends-pchat-wrapper">
+                                <p>{item.first_name}</p>
+                                <p className="friends-names">
+                                    {item.last_name}
+                                </p>
+                            </div>
                         </div>
                     );
                 })}

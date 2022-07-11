@@ -113,9 +113,9 @@ export default function Feed({ onClickLogout, onClickFriend, user }) {
                                     <p
                                         style={{
                                             visibility: imgUploaded,
-                                            "margin-left": "30px",
-                                            "margin-right": "30px",
-                                            "font-size": "10px",
+                                            marginLeft: "30px",
+                                            marginRight: "30px",
+                                            fontSize: "10px",
                                         }}
                                     >
                                         Image selected

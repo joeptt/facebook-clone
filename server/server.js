@@ -405,7 +405,9 @@ io.on("connection", async (socket) => {
     connectedUsers[user_id] = [...(connectedUsers[user_id] || []), socket.id];
     // get recent prvt messages and emit them
     socket.on("getAllPrivateMessages", async (friend_id) => {
+        console.log("friend_id");
         const result = await getAllPrivateMessages(user_id, friend_id);
+        console.log(result);
         socket.emit("receivePrivateMessages", result);
     });
     // store new private message on DB and then send new Message to private chat
@@ -413,7 +415,7 @@ io.on("connection", async (socket) => {
         const sender = await getUserById(user_id);
         const result = await storePrivateMessage(user_id, friend_id, message);
         //
-        for (let i = 0; i < connectedUsers[friend_id].length; i++) {
+        /*  for (let i = 0; i < connectedUsers[friend_id].length; i++) {
             const currentSocketId = connectedUsers[friend_id][i];
             const friendSocket = io.sockets.sockets.get(currentSocketId);
             friendSocket.emit("newPrivateMessage", {
@@ -422,19 +424,15 @@ io.on("connection", async (socket) => {
                 profile_picture_url: sender.profile_picture_url,
                 ...result,
             });
-        }
-        socket.emit("newPrivateMessage", {
-            first_name: sender.first_name,
-            last_name: sender.last_name,
-            profile_picture_url: sender.profile_picture_url,
-            ...result,
-        });
+        } */
+        socket.emit("newPrivateMessage", { ...sender, ...result });
     });
 
     // get recent messages and sent to client
-    const recentChatMessages = await getRecentChatMessage();
-
-    socket.emit("recentMessages", recentChatMessages.reverse());
+    socket.on("getRecentMessages", async () => {
+        const recentChatMessages = await getRecentChatMessage();
+        socket.emit("recentMessages", recentChatMessages.reverse());
+    });
 
     // store new message in DB and then send new message to chat
     socket.on("sendMessage", async (text) => {

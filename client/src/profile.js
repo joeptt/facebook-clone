@@ -114,7 +114,11 @@ export default function Profile({
                                             <div className="upper-wall-post">
                                                 <img
                                                     className="wall-post-img"
-                                                    src={x.profile_picture_url}
+                                                    src={
+                                                        x.profile_picture_url
+                                                            ? x.profile_picture_url
+                                                            : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                                    }
                                                 ></img>
                                                 <p className="username">
                                                     {x.first_name} {x.last_name}

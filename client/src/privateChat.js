@@ -1,26 +1,32 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { socket } from "./socket";
 
-export default function PrivateChat({
-    friend_id,
-    private_messages,
-    onNewPrivateMessage,
-    onClickChatClose,
-}) {
-    console.log(private_messages);
+export default function PrivateChat({ friend_id, onClickChatClose }) {
+    const [privateMessages, setPrivateMessage] = useState([]);
+
+    useEffect(() => {
+        socket.emit("getAllPrivateMessages", friend_id);
+        socket.on("receivePrivateMessages", (messages) => {
+            console.log("messages", messages);
+            setPrivateMessage(messages);
+        });
+        return () => {
+            socket.off("receivePrivateMessages");
+        };
+    }, []);
+
     async function onSubmit(e) {
         e.preventDefault();
         const message = e.target.message.value;
         socket.emit("sendPrivateMessage", { message, friend_id });
         e.target.message.value = "";
+        if (socket) {
+            socket.on("newPrivateMessage", (data) => {
+                console.log("newMessage", data);
+                setPrivateMessage([...privateMessages, data]);
+            });
+        }
     }
-
-    useEffect(() => {
-        socket.on("newPrivateMessage", (data) => {
-            console.log(data);
-            onNewPrivateMessage(data);
-        });
-    }, []);
 
     return (
         <div className="private-chat-window">
@@ -30,9 +36,14 @@ export default function PrivateChat({
                 </p>
             </div>
             <div className="private-chat-messages">
-                {private_messages &&
-                    private_messages.map((x) => {
-                        return <p key={x.id}>{x.text}</p>;
+                {privateMessages &&
+                    privateMessages.map((x) => {
+                        return (
+                            <div key={x.id}>
+                                <img src={x.profile_picture_url}></img>
+                                <p>{x.text}</p>
+                            </div>
+                        );
                     })}
             </div>
             <div className="private-chat-input">

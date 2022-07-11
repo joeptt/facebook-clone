@@ -6,7 +6,6 @@ import Friends from "./friends";
 import GroupChat from "./groupChat";
 import PrivateChat from "./privateChat";
 import Feed from "./feed";
-import { socket } from "./socket";
 
 export default class App extends Component {
     constructor() {
@@ -19,7 +18,6 @@ export default class App extends Component {
             modalShown: false,
             bio: "",
             friend_id: null,
-            private_messages: [],
             chatShwon: false,
         };
 
@@ -29,36 +27,19 @@ export default class App extends Component {
         this.onUploadBio = this.onUploadBio.bind(this);
         this.onUploadCover = this.onUploadCover.bind(this);
         this.onClickFriend = this.onClickFriend.bind(this);
-        this.onNewPrivateMessage = this.onNewPrivateMessage.bind(this);
         this.onClickChatClose = this.onClickChatClose.bind(this);
     }
 
     onClickFriend(friend_id) {
         this.setState({
             chatShown: true,
-        });
-        console.log("Hallo");
-        socket.emit("getAllPrivateMessages", friend_id);
-
-        socket.on("receivePrivateMessages", (data) => {
-            this.setState({
-                friend_id: friend_id,
-                private_messages: data,
-            });
+            friend_id: friend_id,
         });
     }
 
     onClickChatClose() {
         this.setState({
             chatShown: false,
-        });
-    }
-
-    onNewPrivateMessage(newMessage) {
-        console.log("newMessage ", newMessage);
-        console.log("this.state.privateMessages", this.state.private_messages);
-        this.setState({
-            private_messages: [...this.state.private_messages, newMessage],
         });
     }
 
@@ -163,9 +144,6 @@ export default class App extends Component {
                     {this.state.chatShown && (
                         <PrivateChat
                             friend_id={this.state.friend_id}
-                            private_messages={this.state.private_messages}
-                            onClickFriend={this.onClickFriend}
-                            onNewPrivateMessage={this.onNewPrivateMessage}
                             onClickChatClose={this.onClickChatClose}
                         />
                     )}
