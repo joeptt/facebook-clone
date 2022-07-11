@@ -524,6 +524,7 @@ app.post(
 );
 
 app.get("/get/posts", async (req, res) => {
+    // get all friends first then use those friends IDs to get all their posts
     const user_id = req.session.user_id;
     const result = await getAllFriends(user_id);
     const friendsIDs = result.map((x) => {
