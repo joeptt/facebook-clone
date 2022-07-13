@@ -135,7 +135,7 @@ export default function Feed({ onClickLogout, onClickFriend, user }) {
                     </div>
                     <div className="posts-feed">
                         {posts &&
-                            posts.map((post) => {
+                            posts.reverse().map((post) => {
                                 return (
                                     <>
                                         <div
